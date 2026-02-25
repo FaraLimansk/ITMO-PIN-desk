@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;900&display=swap');
+
+:root {
+    /* Цвета */
+    --blue: #0033A0;
+    --blue-light: #EEF3FF;
+    --red: #E4002B;
+    --green: #0A6B3A;
+    --green-light: #E8F8EF;
+    --orange: #B94A00;
+    --orange-light: #FFF3EA;
+    --gold: #92600A;
+    --gold-light: #FEF3C7;
+    --border: #E2E8F0;
+    --bg: #F4F7FB;
+    --text: #0F172A;
+    --card: #FFFFFF;
+    --gray: #64748B;
+    --gray-light: #F1F5F9;
+    
+    /* Размеры шрифтов */
+    --text-4xl: 52px;
+    --text-3xl: 44px;
+    --text-2xl: 38px;
+    --text-xl: 20px;
+    --text-lg: 17px;
+    --text-base: 15px;
+    --text-sm: 14px;
+    --text-xs: 13px;
+    --text-2xs: 12px;
+    --text-3xs: 11px;
+    --text-4xs: 10px;
+    --text-5xs: 9px;
+    
+    /* Толщины шрифтов */
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+    --font-extrabold: 800;
+    --font-black: 900;
+    
+    /* Специфичные комбинации */
+    --tracking-tight: -2px;
+    --tracking-wide: 0.07em;
+}
