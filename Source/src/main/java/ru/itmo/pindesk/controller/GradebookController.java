@@ -7,6 +7,7 @@ import ru.itmo.pindesk.service.GradebookService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/gradebook")
 public class GradebookController {
