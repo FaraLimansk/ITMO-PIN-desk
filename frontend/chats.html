@@ -34,7 +34,7 @@
     <div class="cls-header">
       <div class="cls-title">Чат</div>
       <div class="search-box">
-        <span class="search-icon">🔍</span>
+        <span class="search-icon"></span>
         <input type="text" placeholder="Поиск по чатам..." oninput="filterChats(this.value)">
       </div>
     </div>
@@ -53,10 +53,8 @@
       </div>
       <div class="input-row">
         <div class="input-box">
-          <button class="input-btn" title="Прикрепить файл">📎</button>
           <textarea id="msg-input" placeholder="Написать сообщение..." rows="1"
             onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-          <button class="input-btn" title="Эмодзи">😊</button>
         </div>
         <button class="send-btn" onclick="sendMessage()">➤</button>
       </div>
