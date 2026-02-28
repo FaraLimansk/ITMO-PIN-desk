@@ -6,6 +6,7 @@ import ru.itmo.pindesk.repo.CourseRepository;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/courses")
 public class CourseController {

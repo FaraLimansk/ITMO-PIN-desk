@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрация</title>
+<link rel="stylesheet" href="style/reg.css">
+</head>
+
+<body>
+
+<div class="form-container">
+    <h2>Регистрация</h2>
+
+    <div class="input-group">
+        <input type="text" id="name" placeholder="Имя">
+    </div>
+
+    <div class="input-group">
+        <input type="email" id="email" placeholder="E-mail">
+    </div>
+
+    <div class="input-group">
+        <input type="password" id="password" placeholder="Пароль">
+    </div>
+
+    <div class="input-group">
+        <input type="password" id="confirmPassword" placeholder="Повторите пароль">
+    </div>
+
+    <button class="btn btn-primary" onclick="register()">Далее</button>
+    <button class="btn btn-secondary" onclick="goBack()">Назад</button>
+
+    <div id="message"></div>
+</div>
+
+<script src="scripts/reg.js"></script>
+
+</body>
+</html>
