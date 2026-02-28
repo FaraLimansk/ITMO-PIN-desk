@@ -19,7 +19,7 @@ body {
 /* SIDEBAR */
 .sidebar {
     width: 260px; 
-    background: var(--card); 
+    background: var(--bg); 
     border-right: 1px solid var(--border);
     display: flex; 
     flex-direction: column; 
@@ -96,14 +96,9 @@ nav {
     flex-shrink: 0;
 }
 
-.ava-name { 
-    font-size: var(--text-2xs); 
-    font-weight: var(--font-bold); 
-}
-
-.ava-sub { 
-    font-size: var(--text-4xs); 
-    color: var(--gray); 
+.ava-name {
+    font-size: var(--text-2xs);
+    font-weight: var(--font-bold);
 }
 
 /* MAIN */
@@ -117,7 +112,7 @@ nav {
 
 /* TOPBAR */
 .topbar {
-    background: var(--card); 
+    background: var(--bg); 
     border-bottom: 1px solid var(--border);
     padding: 28px; 
     height: 100px;
@@ -172,18 +167,18 @@ nav {
 }
 
 .subject-dropdown {
-    position: absolute; 
-    top: calc(100% + 6px); 
+    position: absolute;
+    top: calc(100% + 6px);
     right: 0;
-    background: var(--card); 
-    border: 1.5px solid var(--border); 
+    background: var(--bg);
+    border: 1.5px solid var(--border);
     border-radius: 14px;
-    padding: 6px; 
+    padding: 6px;
     min-width: 310px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.12); 
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
     z-index: 200;
-    opacity: 0; 
-    pointer-events: none; 
+    opacity: 0;
+    pointer-events: none;
     transform: translateY(-6px);
     transition: all 0.18s cubic-bezier(.4,0,.2,1);
 }
@@ -216,11 +211,11 @@ nav {
 }
 
 .dd-item:hover { 
-    background: var(--blue-light); 
+    background: var(--border); 
 }
 
 .dd-item.active { 
-    background: var(--blue-light); 
+    background: var(--border); 
 }
 
 .dd-color { 
@@ -264,7 +259,7 @@ nav {
 
 /* SCORE HERO */
 .score-hero {
-    background: var(--card); 
+    background: var(--bg); 
     border: 1.5px solid var(--border); 
     border-radius: 16px;
     overflow: hidden; 
@@ -426,7 +421,7 @@ nav {
 
 /* TABLE CARD */
 .table-card { 
-    background: var(--card); 
+    background: var(--bg); 
     border: 1.5px solid var(--border); 
     border-radius: 16px; 
     overflow: hidden; 
@@ -654,7 +649,7 @@ td {
 
 /* ATTEND CARD */
 .attend-card {
-    background: var(--card); 
+    background: var(--bg); 
     border: 1.5px solid var(--border); 
     border-radius: 16px;
     padding: 20px 24px; 

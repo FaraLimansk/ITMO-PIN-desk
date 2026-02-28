@@ -24,13 +24,14 @@ public class JwtService {
         this.ttlMinutes = ttlMinutes;
     }
 
-    public String issueToken(long userId, String email, Role role) {
+    public String issueToken(long userId, String email, String name, Role role) {
         Instant now = Instant.now();
         Instant exp = now.plusSeconds(ttlMinutes * 60);
 
         return Jwts.builder()
                 .subject(Long.toString(userId))
                 .claim("email", email)
+                .claim("name", name)
                 .claim("role", role.name())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(exp))
@@ -47,9 +48,10 @@ public class JwtService {
 
         long userId = Long.parseLong(claims.getSubject());
         String email = claims.get("email", String.class);
+        String name = claims.get("name", String.class);
         Role role = Role.valueOf(claims.get("role", String.class));
-        return new JwtPayload(userId, email, role);
+        return new JwtPayload(userId, email, name, role);
     }
 
-    public record JwtPayload(long userId, String email, Role role) {}
+    public record JwtPayload(long userId, String email, String name, Role role) {}
 }

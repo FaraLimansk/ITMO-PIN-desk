@@ -14,24 +14,36 @@ let gradebookSummary = null;
 let gradebookItems = [];
 
 // ============================================================
+// AUTH HELPER
+// ============================================================
+function getAuthHeaders() {
+  const token = localStorage.getItem('jwt_token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
+// ============================================================
 // API FUNCTIONS
 // ============================================================
 async function fetchCourses() {
-  const res = await fetch(`${API_BASE_URL}/api/courses`);
+  const res = await fetch(`${API_BASE_URL}/api/courses`, {
+    headers: getAuthHeaders()
+  });
   if (!res.ok) throw new Error('Failed to fetch courses');
   return await res.json();
 }
 
 async function fetchGradebookSummary(courseId) {
-  const userId = 1;
-  const res = await fetch(`${API_BASE_URL}/api/gradebook/summary?courseId=${courseId}&userId=${userId}`);
+  const res = await fetch(`${API_BASE_URL}/api/gradebook/summary?courseId=${courseId}`, {
+    headers: getAuthHeaders()
+  });
   if (!res.ok) throw new Error('Failed to fetch gradebook summary');
   return await res.json();
 }
 
 async function fetchGradebookItems(courseId) {
-  const userId = 1;
-  const res = await fetch(`${API_BASE_URL}/api/gradebook/items?courseId=${courseId}&userId=${userId}`);
+  const res = await fetch(`${API_BASE_URL}/api/gradebook/items?courseId=${courseId}`, {
+    headers: getAuthHeaders()
+  });
   if (!res.ok) throw new Error('Failed to fetch gradebook items');
   return await res.json();
 }
@@ -54,7 +66,17 @@ function transformCourse(apiCourse, index) {
 function transformGradebookToSections(summary, items) {
   const sectionsMap = {};
 
+  if (!items || items.length === 0) {
+    console.warn('No gradebook items received');
+    return [];
+  }
+
   items.forEach(item => {
+    if (!item.categoryTitle) {
+      console.warn('Item without categoryTitle:', item);
+      return;
+    }
+    
     if (!sectionsMap[item.categoryTitle]) {
       sectionsMap[item.categoryTitle] = {
         key: item.categoryTitle.toLowerCase().replace(/\s+/g, '_'),
@@ -74,7 +96,7 @@ function transformGradebookToSections(summary, items) {
     });
   });
 
-  if (summary && summary.categories) {
+  if (summary && summary.categories && summary.categories.length > 0) {
     summary.categories.forEach(cat => {
       const key = cat.title.toLowerCase().replace(/\s+/g, '_');
       const section = Object.values(sectionsMap).find(s => s.key === key);
@@ -87,7 +109,7 @@ function transformGradebookToSections(summary, items) {
   Object.values(sectionsMap).forEach(section => {
     if (section.weight === 0) {
       const totalMax = section.items.reduce((sum, item) => sum + item.max, 0);
-      section.weight = Math.round((totalMax / 100) * 100) || 10;
+      section.weight = totalMax || 10;
     }
   });
 
@@ -179,25 +201,6 @@ async function loadCourseData(course) {
   } catch (err) {
     console.error('Failed to load gradebook:', err);
     course.sections = [];
-  }
-}
-
-async function initCourses() {
-  try {
-    courses = await fetchCourses();
-    courses = courses.map((c, i) => transformCourse(c, i));
-    
-    if (courses.length > 0) {
-      currentCourse = courses[0];
-      await loadCourseData(currentCourse);
-    }
-    
-    renderDD();
-    document.getElementById('btn-label').textContent = currentCourse?.name || 'Нет курсов';
-    renderPage();
-  } catch (err) {
-    console.error('Failed to initialize courses:', err);
-    document.getElementById('content').innerHTML = '<div style="padding:40px;text-align:center;color:#64748B">Ошибка загрузки данных. Попробуйте обновить страницу.</div>';
   }
 }
 
@@ -386,5 +389,72 @@ function renderPage() {
     renderTable(sub)
 }
 
+// ============================================================
+// USER INFO
+// ============================================================
+function loadUserInfo() {
+  const token = localStorage.getItem('jwt_token');
+  if (!token) return;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const name = payload.name || payload.email?.split('@')[0] || 'Пользователь';
+    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    document.getElementById('ava-name').textContent = name;
+    document.getElementById('ava-initials').textContent = initials;
+  } catch (e) {
+    console.error('Failed to load user info:', e);
+  }
+}
+
+function logout() {
+  localStorage.removeItem('jwt_token');
+  courses = [];
+  currentCourse = null;
+  gradebookSummary = null;
+  gradebookItems = [];
+  window.location.href = 'login.html';
+}
+
+// ============================================================
 // INIT
+// ============================================================
+async function initCourses() {
+  const token = localStorage.getItem('jwt_token');
+  if (!token) {
+    window.location.href = 'login.html';
+    return;
+  }
+  loadUserInfo();
+  try {
+    const apiCourses = await fetchCourses();
+    console.log('Courses from API:', apiCourses);
+    courses = apiCourses.map((c, i) => transformCourse(c, i));
+    console.log('Transformed courses:', courses);
+    
+    if (courses.length === 0) {
+      document.getElementById('content').innerHTML = '<div style="padding:40px;text-align:center;color:#64748B">Нет доступных курсов</div>';
+      return;
+    }
+    
+    currentCourse = courses[0];
+    const [summary, items] = await Promise.all([
+      fetchGradebookSummary(currentCourse.id),
+      fetchGradebookItems(currentCourse.id)
+    ]);
+    console.log('Summary:', summary);
+    console.log('Items:', items);
+    gradebookSummary = summary;
+    gradebookItems = items;
+    currentCourse.sections = transformGradebookToSections(summary, items);
+    console.log('Sections:', currentCourse.sections);
+    
+    renderDD();
+    document.getElementById('btn-label').textContent = currentCourse.name;
+    renderPage();
+  } catch (err) {
+    console.error('Failed to initialize courses:', err);
+    document.getElementById('content').innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444">Ошибка загрузки. Проверьте подключение к серверу.</div>';
+  }
+}
+
 initCourses();

@@ -23,11 +23,10 @@
         <a class="nav-item" href="chats.html"><img class="nav-icon" src="assets/chats.svg"> Чаты</a>
     </nav>
 
-    <div class="sidebar-bottom" onclick="window.location.href='login.html'" style="cursor:pointer">
-      <div class="avatar">АИ</div>
+    <div class="sidebar-bottom" onclick="logout()" style="cursor:pointer">
+      <div class="avatar" id="ava-initials">АИ</div>
       <div>
-        <div class="sidebar-user-name">Алексей Иванов</div>
-        <div class="sidebar-user-sub">Группа K3241</div>
+        <div class="sidebar-user-name" id="ava-name">…</div>
       </div>
     </div>
   </aside>

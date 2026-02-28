@@ -20,7 +20,7 @@ body {
 /* ── LEFT NAV SIDEBAR ── */
 .nav-sidebar {
     width: 260px;
-    background: var(--card);
+    background: var(--bg);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -101,15 +101,10 @@ nav {
     font-weight: var(--font-bold);
 }
 
-.ava-sub {
-    font-size: var(--text-4xs);
-    color: var(--gray);
-}
-
 /* ── CHAT LIST SIDEBAR ── */
 .chat-list-sidebar {
     width: 280px;
-    background: var(--card);
+    background: var(--bg);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -298,7 +293,7 @@ nav {
 
 /* CHAT HEADER */
 .chat-header {
-    background: var(--card);
+    background: var(--bg);
     border-bottom: 1px solid var(--border);
     padding: 0 24px;
     height: 56px;
@@ -470,7 +465,7 @@ nav {
 }
 
 .msg-bubble.in {
-    background: var(--card);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 4px 16px 16px 16px;
     color: var(--text);
@@ -530,7 +525,7 @@ nav {
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    background: var(--card);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 20px;
     padding: 2px 7px;
@@ -553,7 +548,7 @@ nav {
 
 /* INPUT */
 .chat-input-wrap {
-    background: var(--card);
+    background: var(--bg);
     border-top: 1px solid var(--border);
     padding: 12px 24px;
     flex-shrink: 0;
@@ -730,7 +725,7 @@ textarea#msg-input::placeholder {
 /* MEMBERS PANEL */
 .members-panel {
     width: 220px;
-    background: var(--card);
+    background: var(--bg);
     border-left: 1px solid var(--border);
     display: flex;
     flex-direction: column;
