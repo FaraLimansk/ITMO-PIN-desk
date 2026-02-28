@@ -28,5 +28,5 @@ function validateEmail(email) {
 }
 
 function goToRegister() {
-    alert("Переход на страницу регистрации");
+    window.location.href = 'reg.html';
 }

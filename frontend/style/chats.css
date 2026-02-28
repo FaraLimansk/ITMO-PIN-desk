@@ -124,7 +124,7 @@ nav {
 }
 
 .cls-title {
-    font-size: var(--text-lg);
+    font-size: var(--text-4xl);
     font-weight: var(--font-black);
     margin-bottom: 10px;
 }

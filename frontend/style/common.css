@@ -2,21 +2,21 @@
 
 :root {
     /* Цвета */
-    --blue: #0033A0;
-    --blue-light: #EEF3FF;
-    --red: #E4002B;
-    --green: #0A6B3A;
-    --green-light: #E8F8EF;
-    --orange: #B94A00;
-    --orange-light: #FFF3EA;
-    --gold: #92600A;
-    --gold-light: #FEF3C7;
-    --border: #E2E8F0;
-    --bg: #F4F7FB;
-    --text: #0F172A;
-    --card: #FFFFFF;
-    --gray: #64748B;
-    --gray-light: #F1F5F9;
+    --blue: #3571fc;
+    --blue-light: #8bbdff;
+    --red: #aa001f;
+    --green: #10B981;
+    --green-light: #1B4D3E;
+    --orange: #F59E0B;
+    --orange-light: #4D2A1A;
+    --gold: #FCD34D;
+    --gold-light: #3D2A1A;
+    --border: #151821;
+    --bg: #0E0F12;
+    --text: #F7FAFC;
+    --gray: #A0AEC0;
+    --gray-light: #4A5568;
+    --dark-blue: #151a3b;
     
     /* Размеры шрифтов */
     --text-4xl: 52px;

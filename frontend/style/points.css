@@ -119,18 +119,18 @@ nav {
 .topbar {
     background: var(--card); 
     border-bottom: 1px solid var(--border);
-    padding: 0 28px; 
-    height: 56px;
+    padding: 28px; 
+    height: 100px;
     display: flex; 
     align-items: center; 
     justify-content: space-between;
-    position: sticky; 
     top: 0; 
     z-index: 60;
 }
 
 .topbar-title { 
-    font-size: var(--text-lg); 
+    color: var(--red);
+    font-size: var(--text-4xl); 
     font-weight: var(--font-black); 
 }
 
@@ -390,6 +390,7 @@ nav {
     width: 68px; 
     text-align: right; 
     white-space: nowrap; 
+    color: white;
 }
 
 .sh-div2 { 
@@ -464,12 +465,12 @@ table {
 thead th {
     padding: 9px 16px; 
     text-align: left;
-    font-size: var(--text-4xs); 
-    font-weight: var(--font-extrabold); 
+    font-size: var(--text-base); 
+    font-weight: var(--font-bold); 
     color: var(--gray);
     text-transform: uppercase; 
     letter-spacing: 0.07em;
-    background: var(--gray-light); 
+    background: var(--dark-blue); 
     border-bottom: 1.5px solid var(--border);
     white-space: nowrap;
 }
@@ -488,18 +489,18 @@ tbody tr:last-child {
 }
 
 tbody tr:hover td { 
-    background: #FAFBFF; 
+    background: var(--border); 
 }
 
 td { 
     padding: 0; 
+    background-color: var(--bg);
     vertical-align: middle; 
 }
 
 /* section group header */
 .sec-row td {
     padding: 7px 16px; 
-    background: var(--gray-light);
     font-size: var(--text-4xs); 
     font-weight: var(--font-extrabold); 
     color: var(--gray);
@@ -542,11 +543,11 @@ td {
 /* weight badge */
 .weight-badge {
     display: inline-block; 
-    font-size: var(--text-3xs); 
-    font-weight: var(--font-extrabold);
+    font-size: var(--text-lg); 
+    font-weight: var(--font-bold);
     padding: 3px 8px; 
     border-radius: 6px;
-    background: var(--gray-light); 
+    background: var(--dark-blue); 
     color: var(--gray);
 }
 
@@ -558,8 +559,8 @@ td {
     min-width: 44px; 
     height: 26px; 
     border-radius: 7px;
-    font-size: var(--text-xs); 
-    font-weight: var(--font-black); 
+    font-size: var(--text-lg); 
+    font-weight: var(--font-bold);
     padding: 0 6px;
 }
 
@@ -618,8 +619,8 @@ td {
     display: inline-flex; 
     align-items: center; 
     gap: 3px;
-    font-size: var(--text-3xs); 
-    font-weight: var(--font-extrabold); 
+    font-size: var(--text-lg); 
+    font-weight: var(--font-bold); 
     padding: 4px 9px; 
     border-radius: 20px;
 }
@@ -641,7 +642,7 @@ td {
 
 /* totals row */
 .totals-row td { 
-    background: #F7F9FF; 
+    background: var(--bg); 
     border-top: 2px solid var(--border); 
     padding: 12px 16px; 
 }

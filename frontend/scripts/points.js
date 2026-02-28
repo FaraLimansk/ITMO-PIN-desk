@@ -6,7 +6,7 @@ const ATTENDANCE_THRESHOLD = 75;
 const BONUS_POINTS = 3;
 const TOTAL_MAX = 100;
 
-const COLORS = ['#0033A0', '#0A6B3A', '#7C3AED', '#B94A00', '#DC2626', '#0891b2'];
+const COLORS = ['#4577e3', '#0A6B3A', '#7C3AED', '#B94A00', '#DC2626', '#0891b2'];
 
 let courses = [];
 let currentCourse = null;
@@ -119,7 +119,7 @@ function formatDate(dateStr) {
   const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
   const day = date.getDate();
   const month = months[date.getMonth()];
-  return `Сдано ${day} ${month}`;
+  return `${day} ${month}`;
 }
 
 // ============================================================
@@ -127,11 +127,10 @@ function formatDate(dateStr) {
 // ============================================================
 function gradeFromScore(s) {
   if (s === null || isNaN(s)) return { letter: '—', color: '#94A3B8' };
-  if (s >= 93) return { letter: 'A', color: '#0A6B3A' };
-  if (s >= 80) return { letter: 'B', color: '#0033A0' };
-  if (s >= 65) return { letter: 'C', color: '#B94A00' };
-  if (s >= 50) return { letter: 'D', color: '#C05200' };
-  return { letter: 'F', color: '#E4002B' };
+  if (s > 90) return { letter: '5', color: '#0A6B3A' };
+  if (s > 74) return { letter: '4', color: '#0033A0' };
+  if (s >= 60) return { letter: '3', color: '#B94A00' };
+  return { letter: '2', color: '#E4002B' };
 }
 
 function scClass(score, max) {
@@ -170,25 +169,6 @@ function renderDD() {
 function toggleDD() {
   document.getElementById('subj-btn').classList.toggle('open');
   document.getElementById('dropdown').classList.toggle('open');
-}
-
-async function selectCourse(id) {
-  currentCourse = courses.find(c => c.id === id);
-  document.getElementById('subj-btn').classList.remove('open');
-  document.getElementById('dropdown').classList.remove('open');
-  document.getElementById('btn-label').textContent = currentCourse.name;
-  
-  try {
-    gradebookSummary = await fetchGradebookSummary(id);
-    gradebookItems = await fetchGradebookItems(id);
-    currentCourse.sections = transformGradebookToSections(gradebookSummary, gradebookItems);
-  } catch (err) {
-    console.error('Failed to load gradebook:', err);
-    currentCourse.sections = [];
-  }
-  
-  renderPage();
-  renderDD();
 }
 
 async function loadCourseData(course) {
@@ -268,14 +248,11 @@ function renderHero(sub) {
       <div class="sb-row">
         <div class="sb-label">${icon} ${name}</div>
         <div class="sb-track"><div class="sb-fill" style="width:${pct}%;background:${sub.color}"></div></div>
-        <div class="sb-val" style="color:${sub.color}">
+        <div class="sb-val">
           ${e !== null ? `${e} / ${secMax} б` : `— / ${secMax} б`}
         </div>
       </div>`;
   }).join('');
-
-  const bonusEarned = false;
-  const bonus = 0;
 
   return `
   <div class="score-hero anim" style="border-left:5px solid ${sub.color}">
@@ -316,7 +293,6 @@ function renderTable(sub) {
       c.title.toLowerCase().replace(/\s+/g, '_') === sec.key
     );
     const secEarned = category ? category.earnedPoints : null;
-    const secMax = category ? category.maxPoints : sec.weight;
 
     const secRow = `
       <tr class="sec-row">
@@ -358,7 +334,6 @@ function renderTable(sub) {
   }).join('');
 
   const total = gradebookSummary ? gradebookSummary.totalPoints : null;
-  const maxPoints = gradebookSummary ? gradebookSummary.maxPoints : TOTAL_MAX;
 
   const grandTotal = `
     <tr class="totals-row">
@@ -398,18 +373,6 @@ function renderTable(sub) {
 }
 
 // ============================================================
-// ATTENDANCE
-// ============================================================
-function renderAttend(sub) {
-  return `
-  <div class="attend-card anim anim-d2" style="display:flex;align-items:center;justify-content:center;min-height:200px;">
-    <div style="text-align:center;color:#64748B">
-      <div>Данные о посещаемости будут доступны позже</div>
-    </div>
-  </div>`;
-}
-
-// ============================================================
 // RENDER PAGE
 // ============================================================
 function renderPage() {
@@ -420,8 +383,7 @@ function renderPage() {
   const sub = currentCourse;
   document.getElementById('content').innerHTML =
     renderHero(sub) +
-    renderTable(sub) +
-    renderAttend(sub);
+    renderTable(sub)
 }
 
 // INIT

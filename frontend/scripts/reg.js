@@ -41,5 +41,5 @@
     }
 
     function goBack() {
-        alert("Возврат назад");
+        window.location.href = 'login.html';
     }
