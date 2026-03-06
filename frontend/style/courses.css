@@ -1,0 +1,139 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #1e1e1e, #000000);
+}
+
+.form-container {
+    background: #dcdcdc;
+    padding: 40px 35px;
+    width: 360px;
+    border-radius: 20px;
+    text-align: center;
+    min-width: 500px;
+}
+
+.form-container h2 {
+    margin-bottom: 25px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.form-container p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 8px;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background: #2c2c2c;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1a1a1a;
+}
+
+.btn-primary:disabled {
+    background: #9c9c9c;
+    cursor: not-allowed;
+}
+
+.btn-skip {
+    background: #9c9c9c;
+    color: black;
+}
+
+.btn-skip:hover {
+    background: #7f7f7f;
+}
+
+.error {
+    color: red;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.success {
+    color: green;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.selected-count {
+    margin-bottom: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.course-list {
+    margin: 20px 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.course-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #fff;
+}
+
+.course-item:hover {
+    border-color: #0033A0;
+    background: #f8f9ff;
+}
+
+.course-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.course-info p {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.btn-enroll {
+    padding: 8px 20px;
+    background: #0033A0;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-enroll:hover {
+    background: #002270;
+}
+
+.btn-enroll:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}

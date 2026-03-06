@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Консультации</title>
+<link rel="stylesheet" href="style/common.css">
+<link rel="stylesheet" href="style/consultations.css">
+<link rel="icon" type="image/x-icon" href="assets/favicon.svg">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/myitmo-logo.svg" alt="">
+    </div>
+
+    <nav>
+        <a class="nav-item" href="points.html"><img class="nav-icon" src="assets/points.svg"> Зачётка</a>
+        <a class="nav-item active" href="consultations.html"><img class="nav-icon" src="assets/consultations-active.svg"> Консультации</a>
+        <a class="nav-item" href="chats.html"><img class="nav-icon" src="assets/chats.svg"> Чаты</a>
+    </nav>
+
+    <div class="sidebar-bottom" onclick="logout()" style="cursor:pointer">
+      <div class="avatar" id="ava-initials">АИ</div>
+      <div>
+        <div class="sidebar-user-name" id="ava-name">…</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="page-title">Консультации</div>
+      <div class="topbar-right">
+        <div class="week-nav">
+          <button class="week-nav-btn" onclick="changeWeek(-1)">‹</button>
+          <span class="week-label" id="week-label">17 – 21, Февраль</span>
+          <button class="week-nav-btn" onclick="changeWeek(1)">›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="calendar-wrap">
+      <table class="calendar-table">
+        <thead>
+          <tr class="cal-head">
+            <th><span style="font-size:16px"></span></th>
+            <th><span class="day-num">17</span><span class="day-name">Пн</span></th>
+            <th><span class="day-num">18</span><span class="day-name">Вт</span></th>
+            <th class="today"><span class="day-num">19</span><span class="day-name">Ср</span></th>
+            <th><span class="day-num">20</span><span class="day-name">Чт</span></th>
+            <th><span class="day-num">21</span><span class="day-name">Пт</span></th>
+          </tr>
+        </thead>
+        <tbody id="cal-body">
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="m-title">—</div>
+        <div class="modal-subtitle" id="m-subtitle">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+
+    <div class="modal-info-row">
+      <span class="modal-info-icon"></span>
+      <div><div class="modal-info-label">Дата и время</div><div class="modal-info-val" id="m-datetime">—</div></div>
+    </div>
+    <div class="modal-info-row">
+      <span class="modal-info-icon"></span>
+      <div><div class="modal-info-label">Место</div><div class="modal-info-val" id="m-place">—</div></div>
+    </div>
+    <div class="modal-info-row">
+      <span class="modal-info-icon"></span>
+      <div><div class="modal-info-label">Преподаватель</div><div class="modal-info-val" id="m-teacher">—</div></div>
+    </div>
+
+    <button class="modal-btn" id="m-action-btn" onclick="handleAction()">—</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="scripts/consultations.js">
+
+</script>
+</body>
+</html>

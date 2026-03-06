@@ -1,4 +1,7 @@
 // ---- DATA ----
+
+const API_BASE_URL = 'http://localhost:8080';
+
 const slots = [
   { id:1, day:1, time:'10:00', topic:'Разбор лабораторной №3', building:'Кронверкский, 49', room:'ауд. 305', teacher:'Смирнов Д.В.' },
   { id:2, day:1, time:'14:00', topic:'Вопросы по курсовой', building:'Ломоносова, 9', room:'ауд. 114', teacher:'Смирнов Д.В.' },

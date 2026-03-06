@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Моя успеваемость</title>
+<link rel="stylesheet" href="style/common.css">
+<link rel="stylesheet" href="style/points.css">
+<link rel="icon" type="image/x-icon" href="assets/favicon.svg">
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/myitmo-logo.svg" alt="">
+    </div>
+    <nav>
+        <a class="nav-item active" href="points.html"><img class="nav-icon" src="assets/points-active.svg"> Зачётка</a>
+        <a class="nav-item" href="consultations.html"><img class="nav-icon" src="assets/consultations.svg"> Консультации</a>
+        <a class="nav-item" href="chats.html"><img class="nav-icon" src="assets/chats.svg"> Чаты</a>
+    </nav>
+    <div class="sidebar-footer" onclick="logout()" style="cursor:pointer">
+      <div class="ava" id="ava-initials">АИ</div>
+      <div>
+        <div class="ava-name" id="ava-name">…</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title">Зачётка</div>
+      <div class="subject-switcher" id="switcher">
+        <button class="subject-btn" id="subj-btn" onclick="toggleDD()">
+          <span id="btn-label">…</span>
+          <span class="arr">▼</span>
+        </button>
+        <div class="subject-dropdown" id="dropdown">
+          <div class="dd-header">Мои предметы · весна 2026</div>
+          <div id="dd-items"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<script src="scripts/points.js"></script>
+</body>
+</html>

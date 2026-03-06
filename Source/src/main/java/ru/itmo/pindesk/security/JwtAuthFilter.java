@@ -41,12 +41,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             FilterChain chain
     ) throws ServletException, IOException {
 
-        // Если уже есть аутентификация — ничего не делаем
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            chain.doFilter(request, response);
-            return;
-        }
-
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         // Нет Bearer-токена -> просто пропускаем дальше
@@ -56,6 +50,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String token = header.substring("Bearer ".length()).trim();
+
         if (token.isEmpty()) {
             chain.doFilter(request, response);
             return;
@@ -71,8 +66,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             var auth = new UsernamePasswordAuthenticationToken(payload, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(auth);
 
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            // Токен не валиден - пропускаем без аутентификации
+            // Контроллер вернёт 401
         }
 
         chain.doFilter(request, response);

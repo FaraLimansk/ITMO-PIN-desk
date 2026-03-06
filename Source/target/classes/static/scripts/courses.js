@@ -1,5 +1,6 @@
 let selectedCourses = new Set();
 let availableCourses = [];
+const API_BASE_URL = 'http://localhost:8080';
 
 async function loadAvailableCourses() {
     const token = localStorage.getItem('jwt_token');
@@ -11,8 +12,8 @@ async function loadAvailableCourses() {
     try {
         // Получаем все курсы и уже записанные
         const [allCoursesRes, myCoursesRes] = await Promise.all([
-            fetch('/api/courses'),
-            fetch('/api/courses/my', {
+            fetch(`${API_BASE_URL}/api/courses`),
+            fetch(`${API_BASE_URL}/api/courses/my`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
         ]);
@@ -97,7 +98,7 @@ async function finishSelection() {
 
     try {
         const enrollPromises = Array.from(selectedCourses).map(courseId =>
-            fetch(`/api/courses/${courseId}/enroll`, {
+            fetch(`${API_BASE_URL}/api/courses/${courseId}/enroll`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`

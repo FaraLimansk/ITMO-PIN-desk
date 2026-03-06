@@ -1,7 +1,7 @@
 // ============================================================
 // CONFIG
 // ============================================================
-const API_BASE_URL = '';
+const API_BASE_URL = 'http://localhost:8080';
 const ATTENDANCE_THRESHOLD = 75;
 const BONUS_POINTS = 3;
 const TOTAL_MAX = 100;

@@ -1,5 +1,7 @@
 package ru.itmo.pindesk.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.itmo.pindesk.dto.auth.AuthDtos.MeResponse;
@@ -10,15 +12,16 @@ import ru.itmo.pindesk.security.JwtService;
 public class UsersController {
 
     @GetMapping("/me")
-    public MeResponse me(Authentication auth) {
-        var payload = (JwtService.JwtPayload) auth.getPrincipal();
+    public ResponseEntity<MeResponse> me(Authentication auth) {
+        if (auth == null || !(auth.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-
-        return new MeResponse(
+        return ResponseEntity.ok(new MeResponse(
                 payload.userId(),
                 payload.email(),
                 null,
                 payload.role().name()
-        );
+        ));
     }
 }
