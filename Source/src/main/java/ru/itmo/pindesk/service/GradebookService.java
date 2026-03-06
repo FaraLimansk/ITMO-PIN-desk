@@ -26,7 +26,7 @@ public class GradebookService {
               c.id as category_id,
               c.title as category_title,
               c.max_points as category_max,
-              coalesce(sum(g.points), 0) as earned
+              cast(coalesce(sum(g.points), 0) as int) as earned
             from assessment_categories c
             left join assessment_items i on i.category_id = c.id
             left join grades g on g.item_id = i.id and g.user_id = :userId

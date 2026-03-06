@@ -8,7 +8,15 @@ spring:
       ddl-auto: validate
   flyway:
     enabled: true
-  logging:
-    level:
-      org.springframework.boot.context.config: DEBUG
-      org.flywaydb: INFO
+
+logging:
+  level:
+    org.springframework.boot.context.config: DEBUG
+    org.flywaydb: INFO
+    org.springframework.jdbc.core: DEBUG
+    ru.itmo.pindesk: DEBUG
+
+app:
+  jwt:
+    secret: "CHANGE_ME_TO_LONG_RANDOM_SECRET_32+_CHARS"
+    ttlMinutes: 120

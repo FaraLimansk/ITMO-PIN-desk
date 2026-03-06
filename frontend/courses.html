@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Выбор курсов</title>
+<link rel="stylesheet" href="style/common.css">
+<link rel="stylesheet" href="style/login.css">
+<style>
+    .course-list {
+        margin: 20px 0;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    .course-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        background: #fff;
+    }
+    .course-item:hover {
+        border-color: #0033A0;
+        background: #f8f9ff;
+    }
+    .course-info h3 {
+        margin: 0 0 5px 0;
+        font-size: 16px;
+        color: #333;
+    }
+    .course-info p {
+        margin: 0;
+        font-size: 13px;
+        color: #666;
+    }
+    .btn-enroll {
+        padding: 8px 20px;
+        background: #0033A0;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .btn-enroll:hover {
+        background: #002270;
+    }
+    .btn-enroll:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+    .btn-skip {
+        padding: 10px 30px;
+        background: #f0f0f0;
+        color: #333;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 15px;
+    }
+    .btn-skip:hover {
+        background: #e0e0e0;
+    }
+    .selected-count {
+        margin-bottom: 15px;
+        color: #666;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+<div class="form-container">
+    <h2>Выберите курсы</h2>
+    <p style="color: #666; margin-bottom: 20px;">Выберите хотя бы один курс для начала обучения</p>
+    
+    <div class="selected-count" id="selected-count">Выбрано курсов: 0</div>
+    
+    <div class="course-list" id="course-list">
+        <!-- Курсы будут загружены здесь -->
+    </div>
+    
+    <button class="btn btn-primary" onclick="finishSelection()" id="btn-finish" disabled>Продолжить</button>
+    <button class="btn btn-skip" onclick="skipSelection()">Пропустить</button>
+    
+    <div id="message"></div>
+</div>
+
+<script src="scripts/courses.js"></script>
+</body>
+</html>
