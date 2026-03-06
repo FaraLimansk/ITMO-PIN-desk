@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/pin_desk
-    username: pin
-    password: pin
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
   flyway:
-    enabled: true
+    enabled: ${SPRING_FLYWAY_ENABLED}
 
 logging:
   level:
@@ -18,5 +18,5 @@ logging:
 
 app:
   jwt:
-    secret: "CHANGE_ME_TO_LONG_RANDOM_SECRET_32+_CHARS"
-    ttlMinutes: 120
+    secret: ${APP_JWT_SECRET}
+    ttlMinutes: ${APP_JWT_TTL_MINUTES}
