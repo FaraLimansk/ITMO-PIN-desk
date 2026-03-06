@@ -1,5 +1,6 @@
 package ru.itmo.pindesk.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.itmo.pindesk.dto.GradebookItemDto;
@@ -21,22 +22,24 @@ public class GradebookController {
     }
 
     @GetMapping("/summary")
-    public GradebookSummaryDto summary(
+    public ResponseEntity<GradebookSummaryDto> summary(
             @RequestParam long courseId,
             Authentication authentication
     ) {
-        JwtService.JwtPayload payload = (JwtService.JwtPayload) authentication.getPrincipal();
-        long userId = payload.userId();
-        return gradebookService.summary(courseId, userId);
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(gradebookService.summary(courseId, payload.userId()));
     }
 
     @GetMapping("/items")
-    public List<GradebookItemDto> items(
+    public ResponseEntity<List<GradebookItemDto>> items(
             @RequestParam long courseId,
             Authentication authentication
     ) {
-        JwtService.JwtPayload payload = (JwtService.JwtPayload) authentication.getPrincipal();
-        long userId = payload.userId();
-        return gradebookService.items(courseId, userId);
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(gradebookService.items(courseId, payload.userId()));
     }
 }

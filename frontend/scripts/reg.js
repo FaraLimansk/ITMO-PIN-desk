@@ -1,3 +1,5 @@
+const API_BASE_URL = 'http://localhost:8080';
+
 async function register() {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -33,7 +35,7 @@ async function register() {
     }
 
     try {
-        const res = await fetch('/api/auth/register', {
+        const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, name, password })

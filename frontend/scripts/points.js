@@ -1,7 +1,7 @@
 // ============================================================
 // CONFIG
 // ============================================================
-const API_BASE_URL = '';
+const API_BASE_URL = 'http://localhost:8080';
 const ATTENDANCE_THRESHOLD = 75;
 const BONUS_POINTS = 3;
 const TOTAL_MAX = 100;
@@ -318,7 +318,7 @@ function renderTable(sub) {
           </td>
           <td class="td-c">
             <span class="sc ${cls}">${item.score !== null ? item.score : '—'}</span>
-            <span style="font-size:10px;color:var(--gray);margin-left:2px">/ ${item.max}</span>
+            <span style="font-size:14px;color:var(--gray);margin-left:2px">/ ${item.max}</span>
           </td>
           <td class="td-c">${pillHtml(item.status)}</td>
         </tr>`;
@@ -327,7 +327,7 @@ function renderTable(sub) {
     const subTotal = `
       <tr style="background:#FAFBFF">
         <td style="padding:8px 16px;font-size:12px;font-weight:700;color:var(--gray)" colspan="2">Итого по разделу</td>
-        <td class="td-c" style="font-size:13px;font-weight:900;color:${sub.color}">
+        <td class="td-c" style="font-size:16px;font-weight:600;color:${sub.color}">
           ${secEarned !== null ? secEarned + ' б' : '—'}
         </td>
         <td></td>
@@ -343,7 +343,7 @@ function renderTable(sub) {
       <td class="totals-label" colspan="2">
         Итого баллов
       </td>
-      <td class="td-c" style="font-size:16px;font-weight:900;color:${sub.color}">
+      <td class="td-c" style="font-size:20px;font-weight:600;color:${sub.color}">
         ${total !== null ? total : '—'}
       </td>
       <td></td>

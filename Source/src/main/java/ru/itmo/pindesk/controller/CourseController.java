@@ -37,39 +37,46 @@ public class CourseController {
     }
 
     @GetMapping("/available")
-    public List<Course> available(Authentication authentication) {
-        JwtService.JwtPayload payload = (JwtService.JwtPayload) authentication.getPrincipal();
+    public ResponseEntity<List<Course>> available(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            return ResponseEntity.status(401).build();
+        }
+        
         List<Long> enrolledIds = enrollmentRepository.findByUserId(payload.userId())
                 .stream()
                 .map(Enrollment::getCourseId)
                 .toList();
-        return courseRepository.findAll().stream()
+        return ResponseEntity.ok(courseRepository.findAll().stream()
                 .filter(c -> !enrolledIds.contains(c.getId()))
-                .toList();
+                .toList());
     }
 
     @PostMapping("/{courseId}/enroll")
     public ResponseEntity<?> enroll(@PathVariable Long courseId, Authentication authentication) {
-        JwtService.JwtPayload payload = (JwtService.JwtPayload) authentication.getPrincipal();
-        long userId = payload.userId();
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            return ResponseEntity.status(401).build();
+        }
 
-        if (enrollmentRepository.existsByUserIdAndCourseId(userId, courseId)) {
+        if (enrollmentRepository.existsByUserIdAndCourseId(payload.userId(), courseId)) {
             return ResponseEntity.badRequest().body("Already enrolled");
         }
 
-        enrollmentRepository.save(new Enrollment(userId, courseId));
+        enrollmentRepository.save(new Enrollment(payload.userId(), courseId));
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/my")
-    public List<Course> myCourses(Authentication authentication) {
-        JwtService.JwtPayload payload = (JwtService.JwtPayload) authentication.getPrincipal();
+    public ResponseEntity<List<Course>> myCourses(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            return ResponseEntity.status(401).build();
+        }
+        
         List<Long> enrolledIds = enrollmentRepository.findByUserId(payload.userId())
                 .stream()
                 .map(Enrollment::getCourseId)
                 .toList();
-        return courseRepository.findAll().stream()
+        return ResponseEntity.ok(courseRepository.findAll().stream()
                 .filter(c -> enrolledIds.contains(c.getId()))
-                .toList();
+                .toList());
     }
 }
