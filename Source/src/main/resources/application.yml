@@ -13,6 +13,8 @@ logging:
   level:
     org.springframework.boot.context.config: DEBUG
     org.flywaydb: INFO
+    org.springframework.jdbc.core: DEBUG
+    ru.itmo.pindesk: DEBUG
 
 app:
   jwt:

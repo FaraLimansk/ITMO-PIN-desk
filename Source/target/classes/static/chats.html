@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Чат</title>
+<link rel="stylesheet" href="style/common.css">
+<link rel="stylesheet" href="style/chats.css">
+<link rel="icon" type="image/x-icon" href="assets/favicon.svg">
+</head>
+<body>
+<div class="layout">
+
+  <!-- NAV SIDEBAR -->
+  <aside class="nav-sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/myitmo-logo.svg" alt="">
+    </div>
+    <nav>
+        <a class="nav-item" href="points.html"><img class="nav-icon" src="assets/points.svg"> Зачётка</a>
+        <a class="nav-item" href="consultations.html"><img class="nav-icon" src="assets/consultations.svg"> Консультации</a>
+        <a class="nav-item active" href="chats.html"><img class="nav-icon" src="assets/chats-active.svg"> Чаты</a>
+    </nav>
+    <div class="sidebar-footer" onclick="logout()" style="cursor:pointer">
+      <div class="ava" id="ava-initials">АИ</div>
+      <div>
+        <div class="ava-name" id="ava-name">…</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CHAT LIST -->
+  <aside class="chat-list-sidebar">
+    <div class="cls-header">
+      <div class="cls-title">Чат</div>
+      <div class="search-box">
+        <span class="search-icon"></span>
+        <input type="text" placeholder="Поиск по чатам..." oninput="filterChats(this.value)">
+      </div>
+    </div>
+    <div class="cls-body" id="chat-list-body"></div>
+  </aside>
+
+  <!-- CHAT AREA -->
+  <div class="chat-area" id="chat-area">
+    <div class="chat-header" id="chat-header"></div>
+    <div class="pinned-bar" id="pinned-bar" style="display:none"></div>
+    <div class="messages" id="messages"></div>
+    <div class="chat-input-wrap">
+      <div class="reply-preview" id="reply-preview">
+        <div class="rp-text" id="reply-text"></div>
+        <button class="rp-close" onclick="cancelReply()">✕</button>
+      </div>
+      <div class="input-row">
+        <div class="input-box">
+          <textarea id="msg-input" placeholder="Написать сообщение..." rows="1"
+            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        </div>
+        <button class="send-btn" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMBERS PANEL -->
+  <div class="members-panel" id="members-panel">
+    <div class="mp-header">
+      <div class="mp-title">Участники</div>
+      <button class="mp-close" onclick="toggleMembers()">✕</button>
+    </div>
+    <div id="members-list"></div>
+  </div>
+
+</div>
+
+<script src="scripts/chats.js"></script>
+</body>
+</html>

@@ -37,18 +37,10 @@ public class SecurityConfig {
                 .formLogin(f -> f.disable())
                 .logout(l -> l.disable())
 
-                .exceptionHandling(e -> e
-                        .authenticationEntryPoint((req, res, ex) -> res.setStatus(401))
-                )
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
 
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
