@@ -10,17 +10,29 @@ services:
       - "5433:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pin -d pin_desk"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: ./Source
     container_name: backend
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     env_file:
-      - .env
+      - ./Source/.env
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   frontend:
     image: nginx:alpine
