@@ -33,7 +33,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./Frontend:/usr/share/nginx/html:ro
+      - ./frontend:/usr/share/nginx/html:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "3000:80"

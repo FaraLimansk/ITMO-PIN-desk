@@ -38,9 +38,43 @@ public class SecurityConfig {
                 .logout(l -> l.disable())
 
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                        // Публичные endpoints
+                        .requestMatchers("/api/auth/**", "/api/health").permitAll()
+                        // Swagger / OpenAPI
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+
+                        // Публичный GET для курсов (доступен всем)
+                        .requestMatchers(HttpMethod.GET, "/api/courses").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/courses/my").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/courses/available").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/courses/teaching").authenticated()
+
+                        // Только для ADMIN
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // Только для TEACHER и ADMIN (создание консультаций, курсов)
+                        .requestMatchers(HttpMethod.POST, "/api/consultations/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/consultations/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/consultations/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/courses").hasAnyRole("TEACHER", "ADMIN")
+
+                        // Студенты могут записываться на курсы
+                        .requestMatchers(HttpMethod.POST, "/api/courses/*/enroll").authenticated()
+
+                        // Аутентифицированные пользователи
+                        .requestMatchers("/api/users/me", "/api/gradebook/summary", "/api/gradebook/items").authenticated()
+
+                        // Преподаватели могут создавать задания и загружать файлы
+                        .requestMatchers(HttpMethod.POST, "/api/gradebook/items").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/gradebook/items/**/files").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/gradebook/files/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/gradebook/files/**").hasAnyRole("TEACHER", "ADMIN")
+
+                        // Всё остальное — требуется аутентификация
+                        .anyRequest().authenticated()
                 )
 
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

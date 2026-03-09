@@ -15,6 +15,7 @@ logging:
     org.flywaydb: INFO
     org.springframework.jdbc.core: DEBUG
     ru.itmo.pindesk: DEBUG
+    ru.itmo.pindesk.security: DEBUG
 
 app:
   jwt:

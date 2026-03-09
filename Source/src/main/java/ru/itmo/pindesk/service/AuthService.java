@@ -23,7 +23,7 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthDtos.AuthResponse register(AuthDtos.RegisterRequest request) {
+    public AuthDtos.AuthResponse register(AuthDtos.RegisterRequest request, String roleParam) {
         String email = request.email().trim().toLowerCase();
 
         if (userRepository.existsByEmailIgnoreCase(email)) {
@@ -33,7 +33,14 @@ public class AuthService {
         User user = new User();
         user.setEmail(email);
         user.setName(request.name());
-        user.setRole(Role.STUDENT);
+        
+        // Если передана роль TEACHER, назначаем её (иначе STUDENT по умолчанию)
+        if ("TEACHER".equalsIgnoreCase(roleParam)) {
+            user.setRole(Role.TEACHER);
+        } else {
+            user.setRole(Role.STUDENT);
+        }
+        
         user.setPasswordHash(passwordEncoder.encode(request.password()));
 
         user = userRepository.save(user);

@@ -1,4 +1,19 @@
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = '/api';
+
+// Проверка URL параметра ?role=TEACHER
+let registerAsTeacher = false;
+let teacherCode = '';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const role = urlParams.get('role');
+    
+    if (role === 'TEACHER') {
+        registerAsTeacher = true;
+        document.getElementById('form-title').textContent = 'Регистрация преподавателя';
+        document.getElementById('teacher-code-group').style.display = 'block';
+    }
+});
 
 async function register() {
     const name = document.getElementById("name").value.trim();
@@ -34,8 +49,28 @@ async function register() {
         return;
     }
 
+    // Проверка кода преподавателя
+    if (registerAsTeacher) {
+        teacherCode = document.getElementById("teacher-code").value.trim();
+        if (!teacherCode) {
+            message.className = "error";
+            message.textContent = "Введите код преподавателя.";
+            return;
+        }
+        // Простой секретный код (в реальности лучше проверять на бэкенде)
+        if (teacherCode !== 'ITMO-TEACHER-2026') {
+            message.className = "error";
+            message.textContent = "Неверный код преподавателя.";
+            return;
+        }
+    }
+
     try {
-        const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+        const url = registerAsTeacher
+            ? `${API_BASE_URL}/auth/register?role=TEACHER`
+            : `${API_BASE_URL}/auth/register`;
+
+        const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, name, password })

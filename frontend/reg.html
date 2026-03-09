@@ -10,7 +10,7 @@
 <body>
 
 <div class="form-container">
-    <h2>Регистрация</h2>
+    <h2 id="form-title">Регистрация</h2>
 
     <div class="input-group">
         <input type="text" id="name" placeholder="Имя">
@@ -26,6 +26,11 @@
 
     <div class="input-group">
         <input type="password" id="confirmPassword" placeholder="Повторите пароль">
+    </div>
+
+    <!-- Поле для секретного кода преподавателя (скрыто по умолчанию) -->
+    <div class="input-group" id="teacher-code-group" style="display:none;">
+        <input type="text" id="teacher-code" placeholder="Код преподавателя">
     </div>
 
     <button class="btn btn-primary" onclick="register()">Далее</button>
