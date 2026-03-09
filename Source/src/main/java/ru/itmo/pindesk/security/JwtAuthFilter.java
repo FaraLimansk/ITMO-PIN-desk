@@ -42,9 +42,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        logger.debug("Authorization header: " + (header != null ? "present" : "missing"));
 
         // Нет Bearer-токена -> просто пропускаем дальше
         if (header == null || !header.startsWith("Bearer ")) {
+            logger.debug("No Bearer token found");
             chain.doFilter(request, response);
             return;
         }
@@ -52,12 +54,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = header.substring("Bearer ".length()).trim();
 
         if (token.isEmpty()) {
+            logger.debug("Empty token");
             chain.doFilter(request, response);
             return;
         }
 
         try {
             JwtService.JwtPayload payload = jwtService.parse(token);
+            logger.debug("Parsed token for user: " + payload.email() + ", role: " + payload.role());
 
             var authorities = List.of(
                     new SimpleGrantedAuthority("ROLE_" + payload.role().name())
@@ -65,8 +69,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             var auth = new UsernamePasswordAuthenticationToken(payload, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(auth);
+            logger.debug("Authentication set in SecurityContext");
 
         } catch (Exception e) {
+            logger.error("Failed to parse token: " + e.getMessage());
             // Токен не валиден - пропускаем без аутентификации
             // Контроллер вернёт 401
         }

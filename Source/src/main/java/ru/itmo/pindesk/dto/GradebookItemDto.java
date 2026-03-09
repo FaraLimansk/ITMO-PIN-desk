@@ -1,6 +1,7 @@
 package ru.itmo.pindesk.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record GradebookItemDto(
         long itemId,
@@ -10,5 +11,6 @@ public record GradebookItemDto(
         int maxPoints,
         LocalDate dueDate,
         String status,
-        int progressPercent
+        int progressPercent,
+        List<AssignmentFileDto> files
 ) {}

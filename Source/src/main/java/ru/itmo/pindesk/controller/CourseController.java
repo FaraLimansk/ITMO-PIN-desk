@@ -32,7 +32,12 @@ public class CourseController {
     }
 
     @PostMapping
-    public Course create(@RequestBody Course course) {
+    public Course create(@RequestBody Course course, Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            throw new IllegalArgumentException("Authentication required");
+        }
+        // Устанавливаем преподавателя как создателя курса
+        course.setTeacherId(payload.userId());
         return courseRepository.save(course);
     }
 
@@ -70,7 +75,7 @@ public class CourseController {
         if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
             return ResponseEntity.status(401).build();
         }
-        
+
         List<Long> enrolledIds = enrollmentRepository.findByUserId(payload.userId())
                 .stream()
                 .map(Enrollment::getCourseId)
@@ -78,5 +83,14 @@ public class CourseController {
         return ResponseEntity.ok(courseRepository.findAll().stream()
                 .filter(c -> enrolledIds.contains(c.getId()))
                 .toList());
+    }
+
+    @GetMapping("/teaching")
+    public ResponseEntity<List<Course>> teaching(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            return ResponseEntity.status(401).build();
+        }
+
+        return ResponseEntity.ok(courseRepository.findByTeacherId(payload.userId()));
     }
 }

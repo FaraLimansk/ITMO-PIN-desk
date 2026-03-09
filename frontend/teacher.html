@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ведение курса</title>
+<link rel="stylesheet" href="style/common.css">
+<link rel="stylesheet" href="style/teacher.css">
+<link rel="icon" type="image/x-icon" href="assets/favicon.svg">
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="assets/logo.svg" alt="Logo" onerror="this.style.display='none'">
+            <span>ITMO PIN</span>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="points.html" class="nav-item">
+                <span class="icon">📊</span>
+                <span>Мои курсы</span>
+            </a>
+            <a href="consultations.html" class="nav-item">
+                <span class="icon">📅</span>
+                <span>Консультации</span>
+            </a>
+            <a href="chats.html" class="nav-item">
+                <span class="icon">💬</span>
+                <span>Чаты</span>
+            </a>
+        </nav>
+
+        <div class="user-profile">
+            <div class="avatar" id="user-avatar">
+                <span id="ava-initials">??</span>
+            </div>
+            <div class="user-info">
+                <div class="user-name" id="user-name">Загрузка...</div>
+                <div class="user-role" id="user-role">Преподаватель</div>
+            </div>
+            <button class="logout-btn" onclick="logout()" title="Выйти">
+                <span>🚪</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-bar">
+            <h1>Ведение курса</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <!-- Выбор курса -->
+            <div class="course-selector">
+                <label for="course-select">Курс:</label>
+                <select id="course-select" onchange="onCourseChange()">
+                    <option value="">Выберите курс</option>
+                </select>
+            </div>
+
+            <!-- Список лабораторных работ -->
+            <div class="assignments-section" id="assignments-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Лабораторные работы</h2>
+                    <button class="btn-add" onclick="showAddAssignmentModal()">+ Добавить работу</button>
+                </div>
+
+                <div class="assignments-list" id="assignments-list">
+                    <!-- Загрузка... -->
+                </div>
+            </div>
+
+            <!-- Сообщение если курсов нет -->
+            <div id="no-courses-message" class="no-courses-message" style="display: none;">
+                <p>У вас пока нет курсов для ведения</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal for adding assignment -->
+<div class="modal-overlay" id="add-assignment-modal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Добавить лабораторную работу</h3>
+            <button class="modal-close" onclick="hideAddAssignmentModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Название категории</label>
+                <input type="text" id="category-title" placeholder="Например: Лабораторные работы">
+            </div>
+            <div class="form-group">
+                <label>Название работы</label>
+                <input type="text" id="assignment-title" placeholder="Например: ЛР №1">
+            </div>
+            <div class="form-group">
+                <label>Макс. балл</label>
+                <input type="number" id="max-points" placeholder="10" min="1" value="10">
+            </div>
+            <div class="form-group">
+                <label>Срок сдачи (необязательно)</label>
+                <input type="date" id="due-date">
+            </div>
+            <div class="form-group">
+                <label>Файл задания (DOCX, необязательно)</label>
+                <input type="file" id="assignment-file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="hideAddAssignmentModal()">Отмена</button>
+            <button class="btn-primary" onclick="createAssignment()">Добавить</button>
+        </div>
+    </div>
+</div>
+
+<div id="message"></div>
+
+<script src="scripts/teacher.js"></script>
+
+</body>
+</html>

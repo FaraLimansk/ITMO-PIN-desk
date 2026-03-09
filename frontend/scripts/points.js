@@ -1,7 +1,7 @@
 // ============================================================
 // CONFIG
 // ============================================================
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = '/api';
 const ATTENDANCE_THRESHOLD = 75;
 const BONUS_POINTS = 3;
 const TOTAL_MAX = 100;
@@ -25,7 +25,7 @@ function getAuthHeaders() {
 // API FUNCTIONS
 // ============================================================
 async function fetchCourses() {
-  const res = await fetch(`${API_BASE_URL}/api/courses/my`, {
+  const res = await fetch(`${API_BASE_URL}/courses/my`, {
     headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error('Failed to fetch courses');
@@ -33,7 +33,7 @@ async function fetchCourses() {
 }
 
 async function fetchGradebookSummary(courseId) {
-  const res = await fetch(`${API_BASE_URL}/api/gradebook/summary?courseId=${courseId}`, {
+  const res = await fetch(`${API_BASE_URL}/gradebook/summary?courseId=${courseId}`, {
     headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error('Failed to fetch gradebook summary');
@@ -41,7 +41,7 @@ async function fetchGradebookSummary(courseId) {
 }
 
 async function fetchGradebookItems(courseId) {
-  const res = await fetch(`${API_BASE_URL}/api/gradebook/items?courseId=${courseId}`, {
+  const res = await fetch(`${API_BASE_URL}/gradebook/items?courseId=${courseId}`, {
     headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error('Failed to fetch gradebook items');
@@ -424,25 +424,40 @@ async function initCourses() {
     window.location.href = 'login.html';
     return;
   }
+  
+  // Проверяем роль пользователя
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const role = payload.role;
+    
+    // Если преподаватель — перенаправляем на страницу ведения курса
+    if (role === 'TEACHER') {
+      window.location.href = 'teacher.html';
+      return;
+    }
+  } catch (e) {
+    console.error('Failed to parse token:', e);
+  }
+  
   loadUserInfo();
   try {
     // Сначала проверяем, есть ли у пользователя записанные курсы
-    const myCoursesRes = await fetch(`${API_BASE_URL}/api/courses/my`, {
+    const myCoursesRes = await fetch(`${API_BASE_URL}/courses/my`, {
       headers: getAuthHeaders()
     });
-    
+
     if (!myCoursesRes.ok) {
       throw new Error('Failed to fetch my courses');
     }
-    
+
     const myCourses = await myCoursesRes.json();
-    
+
     // Если курсов нет — перенаправляем на страницу выбора курсов
     if (myCourses.length === 0) {
       window.location.href = 'courses.html';
       return;
     }
-    
+
     courses = myCourses.map((c, i) => transformCourse(c, i));
     console.log('Transformed courses:', courses);
 

@@ -43,6 +43,7 @@
           <span class="week-label" id="week-label">17 – 21, Февраль</span>
           <button class="week-nav-btn" onclick="changeWeek(1)">›</button>
         </div>
+        <button class="create-btn" id="create-slot-btn" onclick="openCreateModal()" style="display:none;">+ Создать консультацию</button>
       </div>
     </div>
 
@@ -92,6 +93,38 @@
     </div>
 
     <button class="modal-btn" id="m-action-btn" onclick="handleAction()">—</button>
+    <button class="modal-btn danger" id="m-delete-btn" onclick="handleDelete()" style="display:none;margin-top:10px;">Удалить консультацию</button>
+  </div>
+</div>
+
+<!-- CREATE SLOT MODAL -->
+<div class="modal-overlay" id="create-modal" onclick="closeCreateModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Создать консультацию</div>
+      <button class="modal-close" onclick="document.getElementById('create-modal').classList.remove('open')">×</button>
+    </div>
+
+    <div class="modal-info-row">
+      <div><div class="modal-info-label">Дата</div><input type="date" id="c-date" class="modal-input"></div>
+    </div>
+    <div class="modal-info-row">
+      <div><div class="modal-info-label">Время начала</div><input type="time" id="c-start-time" class="modal-input"></div>
+    </div>
+    <div class="modal-info-row">
+      <div><div class="modal-info-label">Время окончания</div><input type="time" id="c-end-time" class="modal-input"></div>
+    </div>
+    <div class="modal-info-row">
+      <div><div class="modal-info-label">Место</div><input type="text" id="c-location" class="modal-input" placeholder="Кронверкский, 49, ауд. 305"></div>
+    </div>
+    <div class="modal-info-row">
+      <div><div class="modal-info-label">Тема</div><input type="text" id="c-topic" class="modal-input" placeholder="Разбор лабораторной"></div>
+    </div>
+    <div class="modal-info-row">
+      <div><div class="modal-info-label">Макс. студентов</div><input type="number" id="c-max-students" class="modal-input" value="1" min="1"></div>
+    </div>
+
+    <button class="modal-btn primary" onclick="handleCreateSlot()">Создать</button>
   </div>
 </div>
 
