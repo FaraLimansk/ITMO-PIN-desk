@@ -5,7 +5,7 @@ VALUES (
     'test@student.com',
     'Тест Студент',
     'STUDENT',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
+    '$2a$10$dQOSpRBIN9F2HVY28mpznuLegHJQd7en6uuLsb4M7uzxD.uCtqYwi'
 )
 ON CONFLICT (email) DO UPDATE SET role = 'STUDENT';
 
@@ -15,6 +15,6 @@ VALUES (
     'test@teacher.com',
     'Тест Преподаватель',
     'TEACHER',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
+    '$2a$10$dQOSpRBIN9F2HVY28mpznuLegHJQd7en6uuLsb4M7uzxD.uCtqYwi'
 )
 ON CONFLICT (email) DO UPDATE SET role = 'TEACHER';

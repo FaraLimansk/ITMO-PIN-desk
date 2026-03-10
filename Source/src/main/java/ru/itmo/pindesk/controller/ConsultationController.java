@@ -55,6 +55,7 @@ public class ConsultationController {
                     slot.getLocation(),
                     slot.getTopic(),
                     slot.getMaxStudents(),
+                    slot.getCourseId(),
                     (int) bookedCount,
                     bookedCount < slot.getMaxStudents()
             );
@@ -82,6 +83,7 @@ public class ConsultationController {
                     slot.getLocation(),
                     slot.getTopic(),
                     slot.getMaxStudents(),
+                    slot.getCourseId(),
                     (int) bookedCount,
                     bookedCount < slot.getMaxStudents()
             );
@@ -108,8 +110,9 @@ public class ConsultationController {
         slot.setLocation(request.location());
         slot.setTopic(request.topic());
         slot.setMaxStudents(request.maxStudents() != null ? request.maxStudents() : 1);
+        slot.setCourseId(request.courseId());
 
-        ConsultationSlot created = consultationService.createSlot(slot, teacher);
+        ConsultationSlot created = consultationService.createSlot(slot, teacher, request.courseId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new SlotResponse(
                 created.getId(),
@@ -121,6 +124,7 @@ public class ConsultationController {
                 created.getLocation(),
                 created.getTopic(),
                 created.getMaxStudents(),
+                created.getCourseId(),
                 0,
                 true
         ));
@@ -145,8 +149,9 @@ public class ConsultationController {
         updatedSlot.setLocation(request.location());
         updatedSlot.setTopic(request.topic());
         updatedSlot.setMaxStudents(request.maxStudents() != null ? request.maxStudents() : 1);
+        updatedSlot.setCourseId(request.courseId());
 
-        ConsultationSlot updated = consultationService.updateSlot(id, updatedSlot, teacher);
+        ConsultationSlot updated = consultationService.updateSlot(id, updatedSlot, teacher, request.courseId());
 
         long bookedCount = bookingRepository.countBySlotIdAndStatus(updated.getId(), ConsultationBooking.BookingStatus.CONFIRMED);
 
@@ -160,6 +165,7 @@ public class ConsultationController {
                 updated.getLocation(),
                 updated.getTopic(),
                 updated.getMaxStudents(),
+                updated.getCourseId(),
                 (int) bookedCount,
                 bookedCount < updated.getMaxStudents()
         ));

@@ -21,6 +21,9 @@ services:
       - db
     env_file:
       - ./Source/.env
+    volumes:
+      - ./target:/app/target        # для классов (если нужно)
+      - ./src:/app/src              # код синхронизируется
     ports:
       - "8080:8080"
     networks:

@@ -1,6 +1,6 @@
 let selectedCourses = new Set();
 let availableCourses = [];
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'http://localhost:8080';
 
 async function loadAvailableCourses() {
     const token = localStorage.getItem('jwt_token');
@@ -12,25 +12,23 @@ async function loadAvailableCourses() {
     try {
         // Получаем все курсы и уже записанные
         const [allCoursesRes, myCoursesRes] = await Promise.all([
-            fetch(`${API_BASE_URL}/courses`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            }),
-            fetch(`${API_BASE_URL}/courses/my`, {
+            fetch(`${API_BASE_URL}/api/courses`),
+            fetch(`${API_BASE_URL}/api/courses/my`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
         ]);
 
         const allCourses = await allCoursesRes.json();
         const myCourses = await myCoursesRes.json();
-
+        
         // Фильтруем — показываем только те, на которые ещё не записан
         const myCourseIds = new Set(myCourses.map(c => c.id));
         availableCourses = allCourses.filter(c => !myCourseIds.has(c.id));
-
+        
         renderCourses();
     } catch (e) {
         console.error('Error loading courses:', e);
-        document.getElementById('course-list').innerHTML =
+        document.getElementById('course-list').innerHTML = 
             '<p style="color: #e74c3c">Ошибка загрузки курсов</p>';
     }
 }
@@ -100,7 +98,7 @@ async function finishSelection() {
 
     try {
         const enrollPromises = Array.from(selectedCourses).map(courseId =>
-            fetch(`${API_BASE_URL}/courses/${courseId}/enroll`, {
+            fetch(`${API_BASE_URL}/api/courses/${courseId}/enroll`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
