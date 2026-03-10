@@ -153,7 +153,9 @@ public class GradebookService {
                 insert into assessment_categories (course_id, title, max_points, sort_order)
                 values (:courseId, :categoryTitle, 0, 0)
             """;
-            var params = Map.of("courseId", courseId, "categoryTitle", categoryTitle);
+            var params = new org.springframework.jdbc.core.namedparam.MapSqlParameterSource()
+                    .addValue("courseId", courseId)
+                    .addValue("categoryTitle", categoryTitle);
             var keyHolder = new org.springframework.jdbc.support.GeneratedKeyHolder();
             jdbc.update(insertCategorySql, params, keyHolder);
             categoryId = (Long) keyHolder.getKey();
@@ -164,7 +166,11 @@ public class GradebookService {
             insert into assessment_items (category_id, title, max_points, due_date, sort_order)
             values (:categoryId, :title, :maxPoints, :dueDate, 0)
         """;
-        var itemParams = Map.of("categoryId", categoryId, "title", title, "maxPoints", maxPoints, "dueDate", dueDate);
+        var itemParams = new org.springframework.jdbc.core.namedparam.MapSqlParameterSource()
+                .addValue("categoryId", categoryId)
+                .addValue("title", title)
+                .addValue("maxPoints", maxPoints)
+                .addValue("dueDate", dueDate);
         var keyHolder = new org.springframework.jdbc.support.GeneratedKeyHolder();
         jdbc.update(insertItemSql, itemParams, keyHolder);
         Long itemId = (Long) keyHolder.getKey();

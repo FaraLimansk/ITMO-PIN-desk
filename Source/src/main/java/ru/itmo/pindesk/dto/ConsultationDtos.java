@@ -11,7 +11,8 @@ public class ConsultationDtos {
             LocalTime endTime,
             String location,
             String topic,
-            Integer maxStudents
+            Integer maxStudents,
+            Long courseId
     ) {}
 
     public record UpdateSlotRequest(
@@ -20,7 +21,8 @@ public class ConsultationDtos {
             LocalTime endTime,
             String location,
             String topic,
-            Integer maxStudents
+            Integer maxStudents,
+            Long courseId
     ) {}
 
     public record SlotResponse(
@@ -33,6 +35,7 @@ public class ConsultationDtos {
             String location,
             String topic,
             Integer maxStudents,
+            Long courseId,
             Integer bookedCount,
             Boolean isAvailable
     ) {}
