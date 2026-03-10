@@ -1,6 +1,6 @@
 // ===== DATA =====
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'http://localhost:8080';
 
 const ME = { id: 'ai', name: 'Алексей Иванов', short: 'АИ', color: '#0033A0', role: 'student' };
 

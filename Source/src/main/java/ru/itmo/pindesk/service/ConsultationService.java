@@ -42,11 +42,12 @@ public class ConsultationService {
      * Создать слот консультации (только преподаватель)
      */
     @Transactional
-    public ConsultationSlot createSlot(ConsultationSlot slot, User teacher) {
+    public ConsultationSlot createSlot(ConsultationSlot slot, User teacher, Long courseId) {
         if (teacher == null) {
             throw new IllegalArgumentException("Teacher must be provided");
         }
         slot.setTeacher(teacher);
+        slot.setCourseId(courseId);
         return slotRepository.save(slot);
     }
 
@@ -54,7 +55,7 @@ public class ConsultationService {
      * Обновить слот консультации
      */
     @Transactional
-    public ConsultationSlot updateSlot(Long slotId, ConsultationSlot updatedSlot, User teacher) {
+    public ConsultationSlot updateSlot(Long slotId, ConsultationSlot updatedSlot, User teacher, Long courseId) {
         ConsultationSlot existing = slotRepository.findById(slotId)
                 .orElseThrow(() -> new IllegalArgumentException("Slot not found"));
 
@@ -68,6 +69,7 @@ public class ConsultationService {
         existing.setLocation(updatedSlot.getLocation());
         existing.setTopic(updatedSlot.getTopic());
         existing.setMaxStudents(updatedSlot.getMaxStudents());
+        existing.setCourseId(courseId);
 
         return slotRepository.save(existing);
     }

@@ -256,16 +256,30 @@ nav {
 /* SLOT CARD */
 .slot {
     border-radius: 8px;
-    padding: 8px 0 20px 10px;
-    margin-bottom: 12px;
+    padding: 8px;
+    margin-bottom: 8px;
     background: var(--border);
     cursor: pointer;
     transition: all 0.15s;
-    min-height: 100px;
+    border-left: 3px solid var(--blue);
+}
+
+.slot.booked {
+    border-left-color: var(--green);
+    background: #e8f5e9;
 }
 
 .slot:hover {
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+}
+
+.slot-course {
+    font-size: var(--text-3xs);
+    color: var(--blue);
+    font-weight: var(--font-bold);
+    margin-bottom: 4px;
+    text-transform: uppercase;
 }
 
 .slot-topic {
@@ -276,10 +290,18 @@ nav {
 }
 
 .slot-meta {
-    font-size: var(--text-2xs);
+    font-size: var(--text-3xs);
+    color: var(--gray);
+    margin-bottom: 4px;
 }
 
-/* MODAL */
+.slot-teacher {
+    font-size: var(--text-3xs);
+    color: var(--gray);
+    font-weight: var(--font-semibold);
+}
+
+/* MODAL - ИСПРАВЛЕННАЯ ВЕРСИЯ */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -303,8 +325,10 @@ nav {
     background: var(--bg);
     border-radius: 20px;
     padding: 32px;
-    width: 420px;
+    width: 520px;
     max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
     box-shadow: 0 24px 64px rgba(0,0,0,0.18);
     transform: translateY(12px);
     transition: transform 0.2s;
@@ -318,7 +342,7 @@ nav {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .modal-title {
@@ -334,7 +358,7 @@ nav {
 }
 
 .modal-close {
-    background: var(--bg);
+    background: #f0f2f5;
     border: none;
     width: 32px;
     height: 32px;
@@ -356,8 +380,8 @@ nav {
 .modal-info-row {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    padding: 10px 0;
+    gap: 12px;
+    padding: 12px 0;
     border-bottom: 1px solid var(--border);
     font-size: var(--text-sm);
 }
@@ -369,23 +393,60 @@ nav {
 .modal-info-icon {
     font-size: var(--text-lg);
     flex-shrink: 0;
+    width: 24px;
+    text-align: center;
 }
 
 .modal-info-label {
     font-weight: var(--font-semibold);
     color: var(--gray);
     font-size: var(--text-2xs);
+    margin-bottom: 4px;
 }
 
 .modal-info-val {
     font-weight: var(--font-bold);
     color: var(--text);
+    word-break: break-word;
+}
+
+/* Стили для полей ввода */
+.modal-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: var(--text-sm);
+    background: white;
+    transition: border-color 0.15s;
+}
+
+.modal-input:focus {
+    outline: none;
+    border-color: var(--blue);
+}
+
+.modal-input select {
+    cursor: pointer;
+    background-color: white;
+}
+
+.modal-input option {
+    padding: 8px;
+}
+
+/* Стили для формы */
+#create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .modal-btn {
     width: 100%;
-    margin-top: 20px;
-    padding: 13px;
+    margin-top: 24px;
+    padding: 14px;
     border: none;
     border-radius: 12px;
     font-family: inherit;
@@ -414,6 +475,7 @@ nav {
     color: white;
 }
 
+/* TOAST */
 .toast {
     position: fixed;
     bottom: 28px;
@@ -427,6 +489,8 @@ nav {
     font-weight: var(--font-bold);
     z-index: 300;
     transition: transform 0.3s;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .toast.show {
@@ -441,42 +505,44 @@ nav {
     background: var(--red);
 }
 
-/* CREATE BUTTON */
+/* Кнопка создания */
 .create-btn {
     background: var(--blue);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 16px;
     border-radius: 10px;
-    font-size: var(--text-sm);
     font-weight: var(--font-bold);
+    font-size: var(--text-sm);
     cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
+    transition: background 0.15s;
 }
 
 .create-btn:hover {
     background: #0028CC;
 }
 
-/* MODAL INPUTS */
-.modal-input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    font-size: var(--text-sm);
-    font-family: inherit;
-    background: var(--bg);
-    color: var(--text);
-    transition: border-color 0.15s;
-}
-
-.modal-input:focus {
-    outline: none;
-    border-color: var(--blue);
-}
-
-.modal-input::placeholder {
-    color: var(--gray);
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .modal {
+        width: 95vw;
+        padding: 24px;
+    }
+    
+    .modal-info-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .modal-info-icon {
+        width: auto;
+    }
+    
+    .topbar {
+        padding: 0 16px;
+    }
+    
+    .week-label {
+        font-size: var(--text-sm);
+    }
 }

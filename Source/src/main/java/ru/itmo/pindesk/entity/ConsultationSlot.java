@@ -37,10 +37,13 @@ public class ConsultationSlot {
     @Column(name = "max_students", nullable = false)
     private Integer maxStudents = 1;
 
+    @Column(name = "course_Id", nullable = false)
+    private Long courseId;
+
     public ConsultationSlot() {}
 
     public ConsultationSlot(Long id, User teacher, LocalDate date, LocalTime startTime, LocalTime endTime,
-                            String location, String topic, Integer maxStudents) {
+                            String location, String topic, Integer maxStudents, Long courseId) {
         this.id = id;
         this.teacher = teacher;
         this.date = date;
@@ -49,6 +52,7 @@ public class ConsultationSlot {
         this.location = location;
         this.topic = topic;
         this.maxStudents = maxStudents;
+        this.courseId = courseId;
     }
 
     public Long getId() { return id; }
@@ -74,4 +78,7 @@ public class ConsultationSlot {
 
     public Integer getMaxStudents() { return maxStudents; }
     public void setMaxStudents(Integer maxStudents) { this.maxStudents = maxStudents; }
+
+    public Long getCourseId() { return courseId; }
+    public void setCourseId(Long courseId) { this.courseId = courseId; }
 }
