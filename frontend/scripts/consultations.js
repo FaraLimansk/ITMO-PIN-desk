@@ -130,33 +130,7 @@ async function loadUserCourses() {
             }
             
             return userCourses;
-        } else {
-            console.error('Failed to load user courses, status:', res.status);
-            
-            // Если API не работает, используем тестовые данные для разработки
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                console.log('Using mock courses for development');
-                
-                if (userRole === 'TEACHER' || userRole === 'ADMIN') {
-                    userCourses = [
-                        { id: 1, name: 'Математический анализ', title: 'Математический анализ' },
-                        { id: 2, name: 'Линейная алгебра', title: 'Линейная алгебра' },
-                        { id: 3, name: 'Программирование на Java', title: 'Программирование на Java' },
-                        { id: 4, name: 'Базы данных', title: 'Базы данных' }
-                    ];
-                } else if (userRole === 'STUDENT') {
-                    userCourses = [
-                        { id: 1, name: 'Математический анализ', title: 'Математический анализ' },
-                        { id: 2, name: 'Линейная алгебра', title: 'Линейная алгебра' }
-                    ];
-                }
-                
-                return userCourses;
-            }
-            
-            userCourses = [];
-            return [];
-        }
+        } 
     } catch (e) {
         console.error('Failed to load user courses:', e);
         
