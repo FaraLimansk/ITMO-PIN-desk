@@ -7,10 +7,13 @@ ru\itmo\pindesk\entity\Enrollment.class
 ru\itmo\pindesk\dto\ConsultationDtos$CreateSlotRequest.class
 ru\itmo\pindesk\repo\ConsultationBookingRepository.class
 ru\itmo\pindesk\dto\GradebookSummaryDto.class
+ru\itmo\pindesk\repo\AssignmentFileRepository.class
+ru\itmo\pindesk\dto\StudentGradeDto.class
 ru\itmo\pindesk\entity\ConsultationBooking$BookingStatus.class
 ru\itmo\pindesk\repo\CourseRepository.class
 ru\itmo\pindesk\controller\HealthController.class
 ru\itmo\pindesk\security\Role.class
+ru\itmo\pindesk\entity\AssignmentFile.class
 ru\itmo\pindesk\dto\ConsultationDtos$BookingResponse.class
 ru\itmo\pindesk\security\JwtAuthFilter.class
 ru\itmo\pindesk\service\GradebookService.class
@@ -26,6 +29,7 @@ ru\itmo\pindesk\security\SecurityConfig.class
 ru\itmo\pindesk\repo\UserRepository.class
 ru\itmo\pindesk\controller\ConsultationController.class
 ru\itmo\pindesk\dto\ConsultationDtos$SlotResponse.class
+ru\itmo\pindesk\dto\AssignmentFileDto.class
 ru\itmo\pindesk\entity\ConsultationBooking.class
 ru\itmo\pindesk\PinDeskApplication.class
 ru\itmo\pindesk\dto\auth\AuthDtos$AuthResponse.class
@@ -39,6 +43,7 @@ ru\itmo\pindesk\security\UserRepositoryUserDetailsService.class
 ru\itmo\pindesk\service\AuthService.class
 ru\itmo\pindesk\service\ConsultationService.class
 ru\itmo\pindesk\entity\Course.class
+ru\itmo\pindesk\dto\StudentGradeDto$GradeItemDto.class
 ru\itmo\pindesk\dto\auth\AuthDtos$MeResponse.class
 ru\itmo\pindesk\config\OpenApiConfig.class
 ru\itmo\pindesk\controller\AuthController.class
