@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.itmo.pindesk.dto.AssignmentFileDto;
 import ru.itmo.pindesk.dto.GradebookItemDto;
 import ru.itmo.pindesk.dto.GradebookSummaryDto;
+import ru.itmo.pindesk.dto.StudentGradeDto;
 import ru.itmo.pindesk.security.JwtService;
 import ru.itmo.pindesk.service.GradebookService;
 
@@ -111,5 +112,20 @@ public class GradebookController {
 
         gradebookService.deleteFile(fileId, payload.userId());
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Получить всех студентов с оценками по предмету
+     * Доступно только преподавателю, ведущему этот курс
+     */
+    @GetMapping("/students")
+    public ResponseEntity<List<StudentGradeDto>> getAllStudentGrades(
+            @RequestParam long courseId,
+            Authentication authentication
+    ) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(gradebookService.getAllStudentGrades(courseId, payload.userId()));
     }
 }
