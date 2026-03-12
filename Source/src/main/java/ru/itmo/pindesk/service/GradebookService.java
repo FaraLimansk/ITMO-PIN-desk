@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.itmo.pindesk.dto.AssignmentFileDto;
 import ru.itmo.pindesk.dto.GradebookItemDto;
 import ru.itmo.pindesk.dto.GradebookSummaryDto;
+import ru.itmo.pindesk.dto.StudentGradeDto;
 import ru.itmo.pindesk.repo.AssignmentFileRepository;
 import ru.itmo.pindesk.repo.UserRepository;
 
@@ -257,5 +258,76 @@ public class GradebookService {
         }
 
         fileRepository.delete(file);
+    }
+
+    /**
+     * Получить всех студентов с оценками по предмету
+     * Доступно только преподавателю, ведущему этот курс
+     */
+    public List<StudentGradeDto> getAllStudentGrades(long courseId, long teacherId) {
+        // Проверяем, что преподаватель ведет этот курс
+        String checkCourseSql = """
+            select count(*) from courses
+            where id = :courseId and teacher_id = :teacherId
+        """;
+        Integer count = jdbc.queryForObject(checkCourseSql, Map.of("courseId", courseId, "teacherId", teacherId), Integer.class);
+        if (count == null || count == 0) {
+            throw new IllegalArgumentException("Teacher does not teach this course");
+        }
+
+        // Получаем всех студентов, записанных на курс
+        String studentsSql = """
+            select u.id as student_id, u.name as student_name, u.email as student_email
+            from users u
+            join enrollments e on e.user_id = u.id
+            where e.course_id = :courseId and u.role = 'STUDENT'
+            order by u.name
+        """;
+        List<Map<String, Object>> students = jdbc.queryForList(studentsSql, Map.of("courseId", courseId));
+
+        // Получаем все задания по курсу
+        String itemsSql = """
+            select i.id as item_id, c.title as category_title, i.title as item_title, i.max_points as max_points
+            from assessment_categories c
+            join assessment_items i on i.category_id = c.id
+            where c.course_id = :courseId
+            order by c.id, i.sort_order, i.id
+        """;
+        List<Map<String, Object>> items = jdbc.queryForList(itemsSql, Map.of("courseId", courseId));
+
+        // Для каждого студента получаем оценки
+        return students.stream().map(student -> {
+            Long studentId = ((Number) student.get("student_id")).longValue();
+            String studentName = (String) student.get("student_name");
+            String studentEmail = (String) student.get("student_email");
+
+            String gradesSql = """
+                select i.id as item_id, c.title as category_title, i.title as item_title,
+                       i.max_points as max_points, coalesce(g.points, 0) as points
+                from assessment_categories c
+                join assessment_items i on i.category_id = c.id
+                left join grades g on g.item_id = i.id and g.user_id = :studentId
+                where c.course_id = :courseId
+                order by c.id, i.sort_order, i.id
+            """;
+            var gradeParams = Map.of("courseId", courseId, "studentId", studentId);
+
+            List<StudentGradeDto.GradeItemDto> grades = jdbc.query(gradesSql, gradeParams, (rs, rowNum) -> {
+                int points = rs.getInt("points");
+                int max = rs.getInt("max_points");
+                int progress = (max == 0) ? 0 : (int) Math.round(points * 100.0 / max);
+
+                return new StudentGradeDto.GradeItemDto(
+                        rs.getLong("item_id"),
+                        rs.getString("category_title"),
+                        rs.getString("item_title"),
+                        points,
+                        max,
+                        progress
+                );
+            });
+
+            return new StudentGradeDto(studentId, studentName, studentEmail, grades);
+        }).toList();
     }
 }
