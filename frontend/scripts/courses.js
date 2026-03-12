@@ -39,7 +39,7 @@ function renderCourses() {
     if (availableCourses.length === 0) {
         container.innerHTML = `
             <p style="color: #0A6B3A; text-align: center; padding: 30px;">
-                ✓ Вы записаны на все доступные курсы
+                Вы записаны на все доступные курсы
             </p>
             <button class="btn btn-primary" onclick="window.location.href='points.html'" style="width: 100%; margin-top: 20px;">
                 Перейти к зачётке
@@ -73,7 +73,7 @@ function toggleCourse(courseId) {
         btn.style.background = '#0033A0';
     } else {
         selectedCourses.add(courseId);
-        btn.textContent = '✓ Выбрано';
+        btn.textContent = 'Выбрано';
         btn.style.background = '#0A6B3A';
     }
 
@@ -128,5 +128,4 @@ function skipSelection() {
     window.location.href = 'points.html';
 }
 
-// Load courses on page load
 loadAvailableCourses();

@@ -524,25 +524,224 @@ nav {
 
 /* Адаптивность для мобильных */
 @media (max-width: 768px) {
-    .modal {
-        width: 95vw;
-        padding: 24px;
-    }
-    
-    .modal-info-row {
-        flex-direction: column;
-        gap: 8px;
-    }
-    
-    .modal-info-icon {
-        width: auto;
-    }
-    
-    .topbar {
-        padding: 0 16px;
-    }
-    
-    .week-label {
-        font-size: var(--text-sm);
-    }
+  /* Перестраиваем layout в колонку */
+  .layout {
+    flex-direction: column;
+  }
+
+  /* Сайдбар превращается в нижнюю навигационную панель */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+    padding: 8px 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  /* Логотип в сайдбаре скрываем */
+  .sidebar-logo {
+    display: none;
+  }
+
+  /* Навигация горизонтальная */
+  nav {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    flex: 1;
+    justify-content: space-around;
+  }
+
+  .nav-item {
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    padding: 8px 12px;
+    font-size: var(--text-3xs);
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-item.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--blue);
+  }
+
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Блок с пользователем в сайдбаре скрываем */
+  .sidebar-bottom {
+    display: none;
+  }
+
+  /* Основной контент получает отступ снизу (чтобы не перекрывать навигацию) */
+  .main {
+    padding-bottom: 70px;
+  }
+
+  /* Топбар адаптируем */
+  .topbar {
+    height: auto;
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    position: relative;
+  }
+
+  .page-title {
+    font-size: var(--text-2xl);
+  }
+
+  .topbar-right {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .week-nav {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .week-nav-btn {
+    padding: 8px 12px;
+  }
+
+  .week-label {
+    font-size: var(--text-sm);
+  }
+
+  .create-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Календарь: горизонтальный скролл остаётся, но ячейки чуть уже */
+  .calendar-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .calendar-table {
+    min-width: 700px; /* можно уменьшить, если нужно */
+  }
+
+  .cal-head th {
+    padding: 8px;
+    font-size: var(--text-3xs);
+  }
+
+  .day-num {
+    font-size: var(--text-lg);
+  }
+
+  .day-name {
+    font-size: var(--text-4xs);
+  }
+
+  .time-cell {
+    width: 60px;
+    padding: 0 4px;
+  }
+
+  .time-label {
+    font-size: var(--text-3xs);
+  }
+
+  .day-cell {
+    min-width: 100px;
+    padding: 4px;
+  }
+
+  /* Карточки слотов */
+  .slot {
+    padding: 6px;
+    margin-bottom: 4px;
+  }
+
+  .slot-course {
+    font-size: var(--text-4xs);
+  }
+
+  .slot-topic {
+    font-size: var(--text-4xs);
+  }
+
+  .slot-meta,
+  .slot-teacher {
+    font-size: var(--text-4xs);
+  }
+
+  /* Модальные окна */
+  .modal {
+    width: 95%;
+    padding: 20px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    margin-bottom: 16px;
+  }
+
+  .modal-title {
+    font-size: var(--text-lg);
+  }
+
+  .modal-subtitle {
+    font-size: var(--text-2xs);
+  }
+
+  .modal-info-row {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  .modal-info-icon {
+    width: auto;
+  }
+
+  .modal-info-label {
+    font-size: var(--text-3xs);
+  }
+
+  .modal-info-val {
+    font-size: var(--text-2xs);
+  }
+
+  .modal-input {
+    font-size: var(--text-2xs);
+    padding: 8px 10px;
+  }
+
+  .modal-btn {
+    padding: 12px;
+    font-size: var(--text-sm);
+    margin-top: 16px;
+  }
+
+  /* Тоаст (уведомление) */
+  .toast {
+    font-size: var(--text-2xs);
+    padding: 8px 16px;
+    bottom: 90px; /* поднимаем над нижней навигацией */
+    white-space: normal;
+    text-align: center;
+    width: 90%;
+  }
 }

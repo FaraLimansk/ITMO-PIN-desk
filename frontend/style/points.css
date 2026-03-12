@@ -819,3 +819,370 @@ td {
     animation-delay: 0.12s; 
     opacity: 0; 
 }
+
+/* ===== АДАПТИВ ДЛЯ СТРАНИЦЫ ЗАЧЁТКА ===== */
+@media (max-width: 768px) {
+  /* Перестраиваем layout */
+  .layout {
+    flex-direction: column;
+  }
+
+  /* Сайдбар → нижняя навигация */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+    padding: 8px 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .sidebar-logo {
+    display: none;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    flex: 1;
+    justify-content: space-around;
+  }
+
+  .nav-item {
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    padding: 8px 12px;
+    font-size: var(--text-3xs);
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-item.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--blue);
+  }
+
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  /* Основной контент с отступом снизу */
+  .main {
+    padding-bottom: 70px;
+  }
+
+  /* Топбар */
+  .topbar {
+    padding: 16px;
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    position: relative;
+  }
+
+  .topbar-title {
+    font-size: var(--text-2xl);
+  }
+
+  .subject-switcher {
+    width: 100%;
+  }
+
+  .subject-btn {
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 14px;
+  }
+
+  .subject-dropdown {
+    width: 100%;
+    min-width: auto;
+    right: auto;
+    left: 0;
+  }
+
+  /* Контентная область */
+  .content {
+    padding: 16px;
+  }
+
+  /* Score Hero — перестраиваем вертикально */
+  .score-hero {
+    flex-direction: column;
+  }
+
+  .sh-accent {
+    width: 100%;
+    height: 5px;
+  }
+
+  .sh-body {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .sh-score {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .sh-score-main {
+    justify-content: center;
+  }
+
+  .sh-score-val {
+    font-size: var(--text-3xl);
+  }
+
+  .sh-bonus {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .sh-div {
+    width: 100%;
+    height: 1px;
+    margin: 8px 0;
+  }
+
+  .sh-breakdown {
+    width: 100%;
+  }
+
+  .sb-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .sb-label {
+    width: 100%;
+    font-size: var(--text-xs);
+  }
+
+  .sb-track {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .sb-val {
+    width: auto;
+    min-width: 60px;
+  }
+
+  .sh-div2 {
+    width: 100%;
+    height: 1px;
+    margin: 8px 0;
+  }
+
+  .sh-grade {
+    width: 100%;
+    padding: 8px 0;
+  }
+
+  .grade-letter {
+    font-size: var(--text-2xl);
+  }
+
+  /* Таблица */
+  .table-card {
+    overflow-x: auto;
+  }
+
+  .tc-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 16px;
+  }
+
+  .tc-teacher {
+    font-size: var(--text-xs);
+  }
+
+  table {
+    min-width: 600px; /* Горизонтальный скролл */
+  }
+
+  thead th {
+    padding: 8px 12px;
+    font-size: var(--text-xs);
+  }
+
+  .td-name {
+    padding: 8px 12px;
+  }
+
+  .work-name {
+    font-size: var(--text-2xs);
+  }
+
+  .work-date {
+    font-size: var(--text-4xs);
+  }
+
+  .td-c {
+    padding: 8px 4px;
+  }
+
+  .weight-badge {
+    font-size: var(--text-sm);
+    padding: 2px 6px;
+  }
+
+  .sc {
+    min-width: 36px;
+    height: 24px;
+    font-size: var(--text-sm);
+  }
+
+  /* Contribution bar */
+  .contrib-wrap {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .contrib-track {
+    width: 40px;
+  }
+
+  .contrib-val {
+    font-size: var(--text-4xs);
+    min-width: auto;
+    text-align: center;
+  }
+
+  /* Pill */
+  .pill {
+    padding: 3px 6px;
+    font-size: var(--text-sm);
+  }
+
+  /* Totals row */
+  .totals-row td {
+    padding: 8px 12px;
+  }
+
+  .totals-label {
+    font-size: var(--text-2xs);
+  }
+
+  /* Attendance card */
+  .attend-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .att-left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .att-big {
+    font-size: var(--text-xl);
+  }
+
+  .att-bonus-note {
+    margin-top: 0;
+  }
+
+  .att-div {
+    width: 100%;
+    height: 1px;
+  }
+
+  .att-weeks {
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .att-div2 {
+    width: 100%;
+    height: 1px;
+  }
+
+  .att-dots {
+    max-width: 100%;
+    justify-content: center;
+  }
+
+  .att-dot {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Threshold note */
+  .threshold-note {
+    padding: 10px 12px;
+    font-size: var(--text-2xs);
+  }
+}
+
+/* Дополнительная адаптация для очень маленьких экранов */
+@media (max-width: 480px) {
+  .nav-item {
+    padding: 6px 8px;
+    font-size: var(--text-4xs);
+  }
+
+  .nav-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .sh-body {
+    padding: 12px;
+  }
+
+  .sh-score-val {
+    font-size: var(--text-2xl);
+  }
+
+  .sb-label {
+    font-size: var(--text-2xs);
+  }
+
+  .sb-val {
+    font-size: var(--text-3xs);
+  }
+
+  .att-big {
+    font-size: var(--text-lg);
+  }
+
+  .att-sub {
+    font-size: var(--text-4xs);
+  }
+
+  .att-bonus-note {
+    font-size: var(--text-3xs);
+    padding: 4px 8px;
+  }
+
+  .att-dot {
+    width: 14px;
+    height: 14px;
+  }
+}
