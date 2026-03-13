@@ -12,6 +12,11 @@ let courses = [];
 let currentCourse = null;
 let gradebookSummary = null;
 let gradebookItems = [];
+let currentUser = null;
+let studentsData = [];
+
+// Для модального окна оценок
+let currentEditGrade = null; // { studentId, itemId, maxPoints, currentPoints }
 
 // ============================================================
 // AUTH HELPER
@@ -19,6 +24,22 @@ let gradebookItems = [];
 function getAuthHeaders() {
   const token = localStorage.getItem('jwt_token');
   return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
+function getCurrentUser() {
+  const token = localStorage.getItem('jwt_token');
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return {
+      id: payload.userId,
+      email: payload.email,
+      name: payload.name,
+      role: payload.role
+    };
+  } catch (e) {
+    return null;
+  }
 }
 
 // ============================================================
@@ -45,6 +66,14 @@ async function fetchGradebookItems(courseId) {
     headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error('Failed to fetch gradebook items');
+  return await res.json();
+}
+
+async function fetchStudents(courseId) {
+  const res = await fetch(`${API_BASE_URL}/api/gradebook/students?courseId=${courseId}`, {
+    headers: getAuthHeaders()
+  });
+  if (!res.ok) throw new Error('Failed to fetch students');
   return await res.json();
 }
 
@@ -383,10 +412,16 @@ function renderPage() {
     document.getElementById('content').innerHTML = '<div style="padding:40px;text-align:center;color:#64748B">Загрузка...</div>';
     return;
   }
-  const sub = currentCourse;
-  document.getElementById('content').innerHTML =
-    renderHero(sub) +
-    renderTable(sub)
+  
+  // Выбираем вид в зависимости от роли
+  if (currentUser?.role === 'TEACHER') {
+    document.getElementById('content').innerHTML = renderTeacherView(currentCourse);
+  } else {
+    const sub = currentCourse;
+    document.getElementById('content').innerHTML =
+      renderHero(sub) +
+      renderTable(sub);
+  }
 }
 
 // ============================================================
@@ -412,11 +447,251 @@ function logout() {
   currentCourse = null;
   gradebookSummary = null;
   gradebookItems = [];
+  studentsData = [];
+  currentUser = null;
+  currentEditGrade = null;
   window.location.href = 'login.html';
 }
 
 // ============================================================
-// INIT
+// GRADE EDITOR MODAL
+// ============================================================
+function openGradeModal(studentName, itemTitle, studentId, itemId, points, maxPoints) {
+  currentEditGrade = { studentId, itemId, maxPoints, currentPoints: points };
+  
+  document.getElementById('gm-title').textContent = `${studentName} — ${itemTitle}`;
+  document.getElementById('grade-slider').max = maxPoints;
+  document.getElementById('grade-slider').value = points;
+  document.getElementById('grade-max').textContent = maxPoints;
+  
+  updateGradeValue(points);
+  document.getElementById('grade-modal').classList.add('open');
+}
+
+function updateGradeValue(value) {
+  const max = parseInt(document.getElementById('grade-slider').max);
+  const pct = (value / max) * 100;
+  
+  document.getElementById('grade-value').textContent = value;
+  document.getElementById('grade-slider-fill').style.width = pct + '%';
+  
+  // Цвет полоски в зависимости от процента
+  const fill = document.getElementById('grade-slider-fill');
+  if (pct >= 80) {
+    fill.style.background = 'var(--green)';
+  } else if (pct >= 60) {
+    fill.style.background = 'var(--blue)';
+  } else {
+    fill.style.background = 'var(--red)';
+  }
+}
+
+function closeGradeModal(e) {
+  if (e.target.id === 'grade-modal') {
+    closeGradeModalDirect();
+  }
+}
+
+function closeGradeModalDirect() {
+  document.getElementById('grade-modal').classList.remove('open');
+  currentEditGrade = null;
+}
+
+async function saveGrade() {
+  if (!currentEditGrade) return;
+  
+  const points = parseInt(document.getElementById('grade-slider').value);
+  const token = localStorage.getItem('jwt_token');
+  
+  try {
+    const res = await fetch(`http://localhost:8080/api/gradebook/items/${currentEditGrade.itemId}/grades`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        studentId: currentEditGrade.studentId,
+        points: points
+      })
+    });
+    
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || 'Failed to save grade');
+    }
+    
+    // Обновляем данные и перерисовываем
+    studentsData = await fetchStudents(currentCourse.id);
+    renderPage();
+    closeGradeModalDirect();
+  } catch (err) {
+    console.error('Failed to save grade:', err);
+    alert('Ошибка при сохранении оценки');
+  }
+}
+
+// ============================================================
+// TEACHER VIEW
+// ============================================================
+function renderTeacherView(course) {
+  const totalStudents = studentsData.length;
+  
+  // Считаем средние баллы по категориям
+  const categoryStats = {};
+  course.sections.forEach(sec => {
+    const studentsWithGrades = studentsData.filter(s => 
+      s.grades.some(g => g.categoryTitle.toLowerCase().replace(/\s+/g, '_') === sec.key)
+    );
+    const filledCount = studentsData.filter(s => {
+      const grade = s.grades.find(g => g.categoryTitle.toLowerCase().replace(/\s+/g, '_') === sec.key);
+      return grade && grade.points > 0;
+    }).length;
+    categoryStats[sec.key] = {
+      avg: studentsWithGrades.length > 0 
+        ? studentsWithGrades.reduce((sum, s) => {
+            const grade = s.grades.find(g => g.categoryTitle.toLowerCase().replace(/\s+/g, '_') === sec.key);
+            return sum + (grade ? grade.points / grade.maxPoints * 100 : 0);
+          }, 0) / studentsWithGrades.length 
+        : 0,
+      filled: filledCount,
+      total: totalStudents,
+      maxPoints: sec.weight
+    };
+  });
+
+  // Считаем итоговые баллы студентов
+  const studentTotals = studentsData.map(s => {
+    const total = s.grades.reduce((sum, g) => sum + (g.points || 0), 0);
+    const max = s.grades.reduce((sum, g) => sum + g.maxPoints, 0);
+    return { id: s.studentId, name: s.studentName, total, max, pct: max > 0 ? total / max * 100 : 0 };
+  });
+  const overallAvg = studentTotals.reduce((sum, s) => sum + s.pct, 0) / (totalStudents || 1);
+
+  // Собираем все уникальные items по категориям из данных студентов
+  const itemsByCategory = {};
+  studentsData.forEach(student => {
+    student.grades.forEach(grade => {
+      const key = grade.categoryTitle.toLowerCase().replace(/\s+/g, '_');
+      if (!itemsByCategory[key]) {
+        itemsByCategory[key] = [];
+      }
+      // Добавляем item если его ещё нет
+      if (!itemsByCategory[key].find(i => i.itemId === grade.itemId)) {
+        itemsByCategory[key].push({
+          itemId: grade.itemId,
+          title: grade.title,
+          maxPoints: grade.maxPoints
+        });
+      }
+    });
+  });
+
+  // Сортируем items внутри каждой категории по itemId
+  Object.keys(itemsByCategory).forEach(key => {
+    itemsByCategory[key].sort((a, b) => a.itemId - b.itemId);
+  });
+
+  // Таблица студентов
+  const studentsTable = `
+    <div class="teacher-table-card">
+      <div class="ttc-stats">
+        <div class="stat-box">
+          <div class="stat-val">${totalStudents}</div>
+          <div class="stat-lbl">Студентов</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" style="color:${overallAvg >= 75 ? '#0A6B3A' : overallAvg >= 60 ? '#0033A0' : '#E4002B'}">${overallAvg.toFixed(1)}%</div>
+          <div class="stat-lbl">Средний балл</div>
+        </div>
+        ${course.sections.map(sec => {
+          const stat = categoryStats[sec.key];
+          const icon = sec.label.split(' ')[0];
+          const name = sec.label.split(' ').slice(1).join(' ') || sec.label;
+          return `
+            <div class="stat-box">
+              <div class="stat-val" style="color:${stat.avg >= 75 ? '#0A6B3A' : stat.avg >= 60 ? '#0033A0' : '#E4002B'}">${stat.avg.toFixed(0)}%</div>
+              <div class="stat-lbl">${icon} ${name}</div>
+              <div class="stat-sub">${stat.filled}/${stat.total}</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      
+      <div class="table-scroll-wrapper">
+        <table class="students-table">
+          <thead>
+            <tr>
+              <th class="student-header">Студент</th>
+              ${course.sections.map(sec => `
+                <th class="category-header" colspan="${itemsByCategory[sec.key]?.length || 1}">
+                  <div class="cat-name">${sec.label}</div>
+                  <div class="cat-max">${sec.weight} б</div>
+                </th>
+              `).join('')}
+              <th class="total-header">
+                <div class="cat-name">Итого</div>
+                <div class="cat-max">${course.sections.reduce((s, sec) => s + sec.weight, 0)} б</div>
+              </th>
+            </tr>
+            <tr class="sub-header">
+              <th class="student-header"></th>
+              ${course.sections.map(sec => {
+                const items = itemsByCategory[sec.key] || [];
+                return items.map(item => `
+                  <th class="item-header">${item.title}</th>
+                `).join('');
+              }).join('')}
+              <th class="total-header"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${studentsData.map(student => {
+              const studentTotal = student.grades.reduce((s, g) => s + (g.points || 0), 0);
+              const studentMax = student.grades.reduce((s, g) => s + g.maxPoints, 0);
+              const pct = studentMax > 0 ? studentTotal / studentMax * 100 : 0;
+              
+              const gradeByItemId = {};
+              student.grades.forEach(g => {
+                gradeByItemId[g.itemId] = g;
+              });
+              
+              return `
+                <tr>
+                  <td class="student-name-cell">${student.studentName}</td>
+                  ${course.sections.map(sec => {
+                    const items = itemsByCategory[sec.key] || [];
+                    return items.map(item => {
+                      const grade = gradeByItemId[item.itemId];
+                      const score = grade ? grade.points : 0;
+                      const max = grade ? grade.maxPoints : item.maxPoints;
+                      const itemPct = max > 0 ? score / max * 100 : 0;
+                      return `
+                        <td class="td-c item-cell" onclick="openGradeModal('${student.studentName}', '${item.title}', ${student.studentId}, ${item.itemId}, ${score}, ${max})">
+                          <span class="sc ${itemPct >= 80 ? 'sc-high' : itemPct >= 60 ? 'sc-mid' : 'sc-low'}">${score}</span>
+                        </td>
+                      `;
+                    }).join('');
+                  }).join('')}
+                  <td class="td-c total-cell">
+                    <span class="sc ${pct >= 80 ? 'sc-high' : pct >= 60 ? 'sc-mid' : 'sc-low'}" style="font-size:15px;font-weight:900">
+                      ${studentTotal} / ${studentMax}
+                    </span>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  return studentsTable;
+}
+
+// ============================================================
+// STUDENT VIEW (existing)
 // ============================================================
 async function initCourses() {
   const token = localStorage.getItem('jwt_token');
@@ -424,39 +699,51 @@ async function initCourses() {
     window.location.href = 'login.html';
     return;
   }
+  
+  currentUser = getCurrentUser();
   loadUserInfo();
+  
   try {
-    // Сначала проверяем, есть ли у пользователя записанные курсы
-    const myCoursesRes = await fetch(`${API_BASE_URL}/api/courses/my`, {
-      headers: getAuthHeaders()
-    });
-    
-    if (!myCoursesRes.ok) {
-      throw new Error('Failed to fetch my courses');
-    }
-    
-    const myCourses = await myCoursesRes.json();
-    
-    // Если курсов нет — перенаправляем на страницу выбора курсов
+    const myCourses = await fetchCourses();
+
     if (myCourses.length === 0) {
       window.location.href = 'courses.html';
       return;
     }
-    
-    courses = myCourses.map((c, i) => transformCourse(c, i));
-    console.log('Transformed courses:', courses);
 
+    courses = myCourses.map((c, i) => transformCourse(c, i));
     currentCourse = courses[0];
-    const [summary, items] = await Promise.all([
-      fetchGradebookSummary(currentCourse.id),
-      fetchGradebookItems(currentCourse.id)
-    ]);
-    console.log('Summary:', summary);
-    console.log('Items:', items);
-    gradebookSummary = summary;
-    gradebookItems = items;
-    currentCourse.sections = transformGradebookToSections(summary, items);
-    console.log('Sections:', currentCourse.sections);
+    
+    // Загружаем данные в зависимости от роли
+    if (currentUser.role === 'TEACHER') {
+      // Для учителя: загружаем студентов
+      studentsData = await fetchStudents(currentCourse.id);
+      // Загружаем items для названий заданий
+      gradebookItems = await fetchGradebookItems(currentCourse.id);
+      // Создаём секции из оценок студентов
+      if (studentsData.length > 0 && studentsData[0].grades.length > 0) {
+        const categoriesMap = {};
+        studentsData[0].grades.forEach(g => {
+          if (!categoriesMap[g.categoryTitle]) {
+            categoriesMap[g.categoryTitle] = {
+              key: g.categoryTitle.toLowerCase().replace(/\s+/g, '_'),
+              label: getCategoryLabel(g.categoryTitle),
+              weight: g.maxPoints
+            };
+          }
+        });
+        currentCourse.sections = Object.values(categoriesMap);
+      }
+    } else {
+      // Для студента: загружаем свои оценки
+      const [summary, items] = await Promise.all([
+        fetchGradebookSummary(currentCourse.id),
+        fetchGradebookItems(currentCourse.id)
+      ]);
+      gradebookSummary = summary;
+      gradebookItems = items;
+      currentCourse.sections = transformGradebookToSections(summary, items);
+    }
 
     renderDD();
     document.getElementById('btn-label').textContent = currentCourse.name;
@@ -465,6 +752,43 @@ async function initCourses() {
     console.error('Failed to initialize courses:', err);
     document.getElementById('content').innerHTML = '<div style="padding:40px;text-align:center;color:#ef4444">Ошибка загрузки. Проверьте подключение к серверу.</div>';
   }
+}
+
+async function selectCourse(id) {
+  currentCourse = courses.find(c => c.id === id);
+  document.getElementById('subj-btn').classList.remove('open');
+  document.getElementById('dropdown').classList.remove('open');
+  document.getElementById('btn-label').textContent = currentCourse.name;
+
+  if (currentUser.role === 'TEACHER') {
+    studentsData = await fetchStudents(id);
+    gradebookItems = await fetchGradebookItems(id);
+    // Пересоздаём секции
+    if (studentsData.length > 0 && studentsData[0].grades.length > 0) {
+      const categoriesMap = {};
+      studentsData[0].grades.forEach(g => {
+        if (!categoriesMap[g.categoryTitle]) {
+          categoriesMap[g.categoryTitle] = {
+            key: g.categoryTitle.toLowerCase().replace(/\s+/g, '_'),
+            label: getCategoryLabel(g.categoryTitle),
+            weight: g.maxPoints
+          };
+        }
+      });
+      currentCourse.sections = Object.values(categoriesMap);
+    }
+  } else {
+    const [summary, items] = await Promise.all([
+      fetchGradebookSummary(id),
+      fetchGradebookItems(id)
+    ]);
+    gradebookSummary = summary;
+    gradebookItems = items;
+    currentCourse.sections = transformGradebookToSections(summary, items);
+  }
+
+  renderPage();
+  renderDD();
 }
 
 initCourses();
