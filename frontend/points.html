@@ -47,6 +47,33 @@
   </div>
 </div>
 
+<!-- MODAL FOR GRADES -->
+<div class="modal-overlay" id="grade-modal" onclick="closeGradeModal(event)">
+  <div class="grade-modal">
+    <div class="grade-modal-header">
+      <div class="grade-modal-title" id="gm-title">—</div>
+      <button class="grade-modal-close" onclick="closeGradeModalDirect()">✕</button>
+    </div>
+    
+    <div class="grade-modal-body">
+      <div class="grade-input-group">
+        <label class="grade-label">Балл</label>
+        <div class="grade-slider-wrapper">
+          <input type="range" class="grade-slider" id="grade-slider" min="0" max="100" value="0" oninput="updateGradeValue(this.value)">
+          <div class="grade-slider-track">
+            <div class="grade-slider-fill" id="grade-slider-fill"></div>
+          </div>
+        </div>
+        <div class="grade-value-display">
+          <span id="grade-value">0</span> / <span id="grade-max">100</span>
+        </div>
+      </div>
+    </div>
+    
+    <button class="grade-modal-btn" onclick="saveGrade()">Сохранить</button>
+  </div>
+</div>
+
 <script src="scripts/points.js"></script>
 </body>
 </html>
