@@ -1,6 +1,7 @@
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\config\OpenApiConfig.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\controller\AdminUserController.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\controller\AuthController.java
+c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\controller\ChatController.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\controller\ConsultationController.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\controller\CourseController.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\controller\GradebookController.java
@@ -8,11 +9,13 @@ c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\controller\Heal
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\controller\UsersController.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\AssignmentFileDto.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\auth\AuthDtos.java
+c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\ChatDtos.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\ConsultationDtos.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\GradebookItemDto.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\GradebookSummaryDto.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\StudentGradeDto.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\AssignmentFile.java
+c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\ChatMessage.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\ConsultationBooking.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\ConsultationSlot.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\Course.java
@@ -20,6 +23,7 @@ c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\Enrollme
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\User.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\PinDeskApplication.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\AssignmentFileRepository.java
+c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\ChatMessageRepository.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\ConsultationBookingRepository.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\ConsultationSlotRepository.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\CourseRepository.java
@@ -31,5 +35,6 @@ c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\security\Role.j
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\security\SecurityConfig.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\security\UserRepositoryUserDetailsService.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\service\AuthService.java
+c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\service\ChatService.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\service\ConsultationService.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\service\GradebookService.java
