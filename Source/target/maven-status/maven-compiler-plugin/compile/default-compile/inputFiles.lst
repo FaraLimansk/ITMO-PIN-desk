@@ -15,7 +15,10 @@ c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\GradebookIt
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\GradebookSummaryDto.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\dto\StudentGradeDto.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\AssignmentFile.java
+<<<<<<< HEAD
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\ChatMessage.java
+=======
+>>>>>>> 06109ecb63863048a31dd5f4ed8a1a99e0a3544b
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\ConsultationBooking.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\ConsultationSlot.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\Course.java
@@ -23,7 +26,10 @@ c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\Enrollme
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\entity\User.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\PinDeskApplication.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\AssignmentFileRepository.java
+<<<<<<< HEAD
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\ChatMessageRepository.java
+=======
+>>>>>>> 06109ecb63863048a31dd5f4ed8a1a99e0a3544b
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\ConsultationBookingRepository.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\ConsultationSlotRepository.java
 c:\Users\Ivan\ITMO-PIN-desk\Source\src\main\java\ru\itmo\pindesk\repo\CourseRepository.java
