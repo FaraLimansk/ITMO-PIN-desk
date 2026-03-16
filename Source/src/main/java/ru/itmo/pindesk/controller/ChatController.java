@@ -1,6 +1,7 @@
 package ru.itmo.pindesk.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.itmo.pindesk.dto.ChatDtos;
 import ru.itmo.pindesk.service.ChatService;
@@ -28,16 +29,25 @@ public class ChatController {
 
     @PostMapping("/messages")
     public ResponseEntity<ChatDtos.MessageResponse> sendMessage(
-            @RequestBody ChatDtos.SendMessageRequest request
+            @RequestBody ChatDtos.SendMessageRequest request,
+            Authentication auth
     ) {
-        // Используем тестового пользователя (id=1)
-        ChatDtos.MessageResponse response = chatService.sendMessage(1L, request.text());
+        Long senderId = getSenderIdFromAuth(auth);
+        ChatDtos.MessageResponse response = chatService.sendMessage(senderId, request.text());
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/messages/{id}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable Long id) {
-        chatService.deleteMessage(id, 1L);
+    public ResponseEntity<Void> deleteMessage(@PathVariable Long id, Authentication auth) {
+        Long userId = getSenderIdFromAuth(auth);
+        chatService.deleteMessage(id, userId);
         return ResponseEntity.ok().build();
+    }
+
+    private Long getSenderIdFromAuth(Authentication auth) {
+        if (auth == null || !(auth.getPrincipal() instanceof ru.itmo.pindesk.security.JwtService.JwtPayload payload)) {
+            throw new IllegalArgumentException("Unauthorized");
+        }
+        return payload.userId();
     }
 }

@@ -1,18 +1,8 @@
 // ===== DATA =====
 
-<<<<<<< HEAD
-const API_BASE_URL = 'http://localhost:8080/api';
-=======
 const API_BASE_URL = 'http://localhost:8080';
->>>>>>> 06109ecb63863048a31dd5f4ed8a1a99e0a3544b
 
-let currentUser = {
-  id: 1,
-  name: 'Гость',
-  short: 'Г',
-  color: '#0033A0',
-  role: 'student'
-};
+let currentUser = null;
 
 // Общий чат для всех студентов и преподавателей
 let generalChat = {
@@ -37,8 +27,10 @@ let lastMessageId = null;
 // ===== API CALLS =====
 
 async function apiCall(endpoint, options = {}) {
+  const token = localStorage.getItem('jwt_token');
   const headers = {
     'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     ...options.headers
   };
 
@@ -59,11 +51,39 @@ async function apiCall(endpoint, options = {}) {
   return null;
 }
 
+// ===== LOAD CURRENT USER =====
+
+async function loadCurrentUser() {
+  try {
+    const user = await apiCall('/api/users/me');
+    currentUser = {
+      id: user.id,
+      name: user.name,
+      short: user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
+      color: '#0033A0',
+      role: user.role.toLowerCase()
+    };
+    
+    // Обновляем отображение в sidebar
+    document.getElementById('ava-name').textContent = user.name;
+    document.getElementById('ava-initials').textContent = currentUser.short;
+  } catch (e) {
+    console.error('Failed to load current user:', e);
+    currentUser = {
+      id: 1,
+      name: 'Гость',
+      short: 'Г',
+      color: '#0033A0',
+      role: 'student'
+    };
+  }
+}
+
 // ===== CHAT MEMBERS =====
 
 async function loadChatMembers() {
   try {
-    const users = await apiCall('/users/all');
+    const users = await apiCall('/api/users/all');
     generalChat.members = users.map(u => ({
       id: u.id,
       name: u.name,
@@ -81,10 +101,12 @@ async function loadChatMembers() {
 
 async function loadMessages() {
   try {
-    const messages = await apiCall('/chat/messages?limit=100');
+    const messages = await apiCall('/api/chat/messages?limit=100');
     generalChat.messages = messages.map(m => ({
       id: m.id,
       from: String(m.senderId),
+      fromName: m.senderName,
+      fromRole: m.senderRole || 'student',
       text: m.text,
       time: formatTime(m.createdAt),
       date: formatDate(m.createdAt),
@@ -110,7 +132,7 @@ async function sendMessage() {
   if (!text) return;
 
   try {
-    await apiCall('/chat/messages', {
+    await apiCall('/api/chat/messages', {
       method: 'POST',
       body: JSON.stringify({ text })
     });
@@ -129,7 +151,7 @@ async function sendMessage() {
 function startPolling() {
   pollInterval = setInterval(async () => {
     try {
-      const messages = await apiCall('/chat/messages?limit=10');
+      const messages = await apiCall('/api/chat/messages?limit=10');
       if (messages.length > 0) {
         const newLastId = messages[messages.length - 1].id;
         if (newLastId !== lastMessageId) {
@@ -281,16 +303,19 @@ function renderMessages() {
       return;
     }
 
-    const avatarBg = member ? member.color : '#64748B';
-    const avatarShort = member ? member.short : '??';
-    const isTeacher = member && member.role === 'teacher';
+    // Используем данные из сообщения или из списка участников
+    const senderName = msg.fromName || (member ? member.name : 'Неизвестен');
+    const senderRole = (msg.fromRole || (member ? member.role : 'student')).toLowerCase();
+    const avatarBg = member ? member.color : '#0033A0';
+    const avatarShort = member ? member.short : senderName.substring(0, 2).toUpperCase();
+    const isTeacher = senderRole === 'teacher';
 
     let replyHtml = '';
     if (msg.replyTo) {
       const orig = msgs.find(m => m.id === msg.replyTo);
       if (orig) {
-        const origMember = getMember(orig.from, currentChat);
-        replyHtml = `<div class="reply-to"><b>${origMember ? origMember.name.split(' ')[0] : 'Вы'}</b>: ${orig.text.slice(0,60)}${orig.text.length > 60 ? '…' : ''}</div>`;
+        const origName = orig.fromName || (member ? member.name.split(' ')[0] : 'Вы');
+        replyHtml = `<div class="reply-to"><b>${origName}</b>: ${orig.text.slice(0,60)}${orig.text.length > 60 ? '…' : ''}</div>`;
       }
     }
 
@@ -301,8 +326,8 @@ function renderMessages() {
       ).join('');
     }
 
-    const nameHtml = !isOut && !isContinuation
-      ? `<div class="msg-sender ${isTeacher ? 'teacher' : ''}">${member ? member.name : 'Неизвестен'}</div>`
+    const nameHtml = !isContinuation
+      ? `<div class="msg-sender ${isTeacher ? 'teacher' : ''}">${senderName}</div>`
       : '';
 
     html += `
@@ -420,6 +445,7 @@ function logout() {
 // ===== INIT =====
 
 async function init() {
+  await loadCurrentUser();
   await loadChatMembers();
   await loadMessages();
   renderChatList();

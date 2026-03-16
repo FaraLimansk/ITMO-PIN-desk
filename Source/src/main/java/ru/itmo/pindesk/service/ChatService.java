@@ -84,10 +84,12 @@ public class ChatService {
 
     private ChatDtos.MessageResponse toResponse(ChatMessage message, User sender) {
         String senderName = sender != null ? sender.getName() : "Unknown";
+        String senderRole = sender != null ? sender.getRole().name() : "STUDENT";
         return new ChatDtos.MessageResponse(
                 message.getId(),
                 message.getSenderId(),
                 senderName,
+                senderRole,
                 message.getText(),
                 message.getCreatedAt(),
                 message.getEdited()

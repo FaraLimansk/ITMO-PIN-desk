@@ -8,6 +8,7 @@ public class ChatDtos {
             Long id,
             Long senderId,
             String senderName,
+            String senderRole,
             String text,
             LocalDateTime createdAt,
             Boolean edited
