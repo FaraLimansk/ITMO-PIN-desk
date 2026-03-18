@@ -76,24 +76,24 @@ function loadUserInfo() {
         window.location.href = 'login.html';
         return;
     }
-    
+
     try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        
+        const payload = JSON.parse(decodeURIComponent(escape(atob(token.split('.')[1]))));
+
         currentUser = {
-            id: payload.id,
+            id: payload.userId,
             name: payload.name,
             email: payload.email,
             role: payload.role
         };
         userRole = payload.role;
-        
+
         const name = payload.name || payload.email?.split('@')[0] || 'Пользователь';
         const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-        
+
         document.getElementById('ava-name').textContent = name;
         document.getElementById('ava-initials').textContent = initials;
-        
+
     } catch (e) {
         console.error('Failed to load user info:', e);
         localStorage.removeItem('jwt_token');
