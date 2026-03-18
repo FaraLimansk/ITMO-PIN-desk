@@ -32,10 +32,6 @@
   <aside class="chat-list-sidebar">
     <div class="cls-header">
       <div class="cls-title">Чат</div>
-      <div class="search-box">
-        <span class="search-icon"></span>
-        <input type="text" placeholder="Поиск по чатам..." oninput="filterChats(this.value)">
-      </div>
     </div>
     <div class="cls-body" id="chat-list-body"></div>
   </aside>
@@ -58,15 +54,6 @@
         <button class="send-btn" onclick="sendMessage()">➤</button>
       </div>
     </div>
-  </div>
-
-  <!-- MEMBERS PANEL -->
-  <div class="members-panel" id="members-panel">
-    <div class="mp-header">
-      <div class="mp-title">Участники</div>
-      <button class="mp-close" onclick="toggleMembers()">✕</button>
-    </div>
-    <div id="members-list"></div>
   </div>
 
 </div>
