@@ -181,7 +181,7 @@ function chatItemHtml(c) {
 }
 
 function getPreviewText(msg, chat) {
-  const sender = msg.from === String(currentUser?.id) ? 'Вы' : getMember(msg.from, chat)?.name.split(' ')[0] || '';
+  const sender = '';
   const text = msg.text;
   return sender ? `${sender}: ${text}` : text;
 }
@@ -361,7 +361,7 @@ function loadUserInfo() {
   const token = localStorage.getItem('jwt_token');
   if (!token) return;
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = JSON.parse(decodeURIComponent(escape(atob(token.split('.')[1]))));
     const name = payload.name || payload.email?.split('@')[0] || 'Пользователь';
     const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
     document.getElementById('ava-name').textContent = name;

@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.itmo.pindesk.dto.AssignmentFileDto;
+import ru.itmo.pindesk.dto.GradeRequest;
 import ru.itmo.pindesk.dto.GradebookItemDto;
 import ru.itmo.pindesk.dto.GradebookSummaryDto;
 import ru.itmo.pindesk.dto.StudentGradeDto;
@@ -127,5 +128,22 @@ public class GradebookController {
             return ResponseEntity.status(401).build();
         }
         return ResponseEntity.ok(gradebookService.getAllStudentGrades(courseId, payload.userId()));
+    }
+
+    /**
+     * Установить оценку студенту за задание
+     * Доступно только преподавателю, ведущему этот курс
+     */
+    @PostMapping("/items/{itemId}/grades")
+    public ResponseEntity<Void> setGrade(
+            @PathVariable long itemId,
+            @RequestBody GradeRequest request,
+            Authentication authentication
+    ) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtService.JwtPayload payload)) {
+            return ResponseEntity.status(401).build();
+        }
+        gradebookService.setGrade(itemId, request.studentId(), request.points(), payload.userId());
+        return ResponseEntity.ok().build();
     }
 }

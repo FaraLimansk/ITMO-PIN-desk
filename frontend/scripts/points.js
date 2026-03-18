@@ -431,7 +431,7 @@ function loadUserInfo() {
   const token = localStorage.getItem('jwt_token');
   if (!token) return;
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = JSON.parse(decodeURIComponent(escape(atob(token.split('.')[1]))));
     const name = payload.name || payload.email?.split('@')[0] || 'Пользователь';
     const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
     document.getElementById('ava-name').textContent = name;
@@ -504,7 +504,7 @@ async function saveGrade() {
   const token = localStorage.getItem('jwt_token');
   
   try {
-    const res = await fetch(`http://localhost:8080/api/gradebook/items/${currentEditGrade.itemId}/grades`, {
+    const res = await fetch(`${API_BASE_URL}/api/gradebook/items/${currentEditGrade.itemId}/grades`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

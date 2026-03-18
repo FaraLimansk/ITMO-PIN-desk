@@ -330,4 +330,55 @@ public class GradebookService {
             return new StudentGradeDto(studentId, studentName, studentEmail, grades);
         }).toList();
     }
+
+    /**
+     * Установить оценку студенту за задание
+     * Доступно только преподавателю, ведущему этот курс
+     */
+    @Transactional
+    public void setGrade(long itemId, long studentId, int points, long teacherId) {
+        // Проверяем, что преподаватель ведет этот курс
+        String checkCourseSql = """
+            select count(*) from assessment_items i
+            join assessment_categories c on c.id = i.category_id
+            join courses co on co.id = c.course_id
+            where i.id = :itemId and co.teacher_id = :teacherId
+        """;
+        Integer count = jdbc.queryForObject(checkCourseSql, Map.of("itemId", itemId, "teacherId", teacherId), Integer.class);
+        if (count == null || count == 0) {
+            throw new IllegalArgumentException("Teacher does not teach this course");
+        }
+
+        // Проверяем, что item существует и получаем max_points
+        String itemSql = """
+            select i.max_points from assessment_items i where i.id = :itemId
+        """;
+        Integer maxPoints = jdbc.queryForObject(itemSql, Map.of("itemId", itemId), Integer.class);
+        if (maxPoints == null) {
+            throw new IllegalArgumentException("Item not found");
+        }
+
+        // Проверяем, что points в допустимом диапазоне
+        if (points < 0 || points > maxPoints) {
+            throw new IllegalArgumentException("Points must be between 0 and " + maxPoints);
+        }
+
+        // Определяем статус в зависимости от баллов
+        String status = (points > 0) ? "DONE" : "PEND";
+
+        // Вставляем или обновляем оценку
+        String upsertSql = """
+            insert into grades (user_id, item_id, points, status, graded_at)
+            values (:studentId, :itemId, :points, :status, now())
+            on conflict (user_id, item_id)
+            do update set points = :points, status = :status, graded_at = now()
+        """;
+        var params = Map.of(
+                "studentId", studentId,
+                "itemId", itemId,
+                "points", points,
+                "status", status
+        );
+        jdbc.update(upsertSql, params);
+    }
 }
